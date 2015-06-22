@@ -265,10 +265,18 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
                     if (confirm('Interval 25\' passed. Switch to interval 5\'?')) {
                         $scope.startTimer('5', 300);
                     }
+                    else {
+                        // @todo: this is added to prevent confirm() lopp if socket failed
+                        $scope.user.state = 'stopped';
+                    }
                     break;
                 case '5':
                     if (confirm('Interval 5\' passed. Switch to interval 25\'?')) {
                         $scope.startTimer('25', 1500);
+                    }
+                    else {
+                        // @todo: this is added to prevent confirm() lopp if socket failed
+                        $scope.user.state = 'stopped';
                     }
                     break;
             }
