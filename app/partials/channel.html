@@ -1,0 +1,36 @@
+
+<div class="row">
+    <h3>Channel: #{{channel.name}}</h3>
+
+    <br />
+    <div class="row">
+        <div
+                class="col-xs-12 col-sm-6 col-md-4 col-lg-3 text-center"
+                ng-repeat="pomodor in pomodores track by $index"
+                ng-controller="PomodorCtrl"
+                ng-init="init(pomodor)"
+            >
+            <img class="img-circle" src="http://www.gravatar.com/avatar/{{pomodor.md5_hash}}">
+            <h2>{{pomodor.name}}</h2>
+            <span>{{pomodor.email}}</span>
+            <h1
+                    ng-switch on="pomodor.state"
+                    class="{{pomodorClass()}}"
+                >
+                <span ng-switch-when="running">
+                    {{pomodor.current | secondsToDateTime | date : 'm:ss'}}
+                </span>
+                <span ng-switch-when="stopped">
+                    stopped
+                </span>
+                <span ng-switch-when="paused">
+                    paused
+                </span>
+            </h1>
+            <h4 class="{{pomodorClass()}}">{{pomodorText()}}</h4>
+            <!--<p><a class="btn btn-default" href="#" role="button">View details »</a></p>-->
+        </div>
+    </div>
+</div>
+
+<hr />

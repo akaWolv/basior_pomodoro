@@ -1,0 +1,16 @@
+.colors-interval-25 {
+    background-color: indianred;
+    color: ghostwhite
+}
+.colors-interval-5 {
+    background-color: greenyellow;
+    color: #000000;
+}
+.colors-interval-break {
+    background-color: lightgray;
+    color: white;
+}
+.colors-interval-pause {
+    background-color: #ffff00;
+    color: dimgrey;
+}

@@ -1,0 +1,11 @@
+{
+  "name": "application-devfuze-pomodoro",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "^1.4.1",
+    "bootstrap": "^3.3.5",
+    "express": "^4.13.0",
+    "http": "0.0.0",
+    "socket.io": "^1.3.5"
+  }
+}

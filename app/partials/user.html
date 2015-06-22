@@ -1,0 +1,32 @@
+
+<div class="row">
+    <h3>User: {{user.name}} ({{user.email}})</h3>
+    <br />
+    <div class="row">
+        <div class="col-xs-12 col-sm-2 text-center">
+            <img class="img-circle" ng-src="http://www.gravatar.com/avatar/{{user.md5_hash}}">
+        </div>
+        <div class="col-xs-12 col-sm-10 text-center">
+            <button
+                    type="button"
+                    class="btn btn-default btn-lg pull-left {{action.text_class}}"
+                    style="margin-left: 10px;"
+                    ng-repeat="action in actions"
+                    ng-click="call(action.call_func)"
+                >
+                <span class="glyphicon {{action.img_class}}" aria-hidden="true"></span> {{action.action}}
+            </button>
+            <div style="clear: left; height: 10px;"></div>
+            <button
+                    type="button"
+                    class="btn btn-default btn-xs pull-left {{action.text_class}}"
+                    style="margin-left: 10px;"
+                    ng-repeat="action in actions_intervals"
+                    ng-click="call(action.call_func)"
+                    >
+                <span class="glyphicon {{action.img_class}}" aria-hidden="true"></span> {{action.action}}
+            </button>
+        </div>
+    </div>
+</div>
+<hr />
