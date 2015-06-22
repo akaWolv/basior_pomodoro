@@ -7,15 +7,36 @@
             </div>
             <div class="form-group">
                 <label for="inputChannel">#</label>
-                <input type="text" class="form-control" id="inputChannel" placeholder="channel" ng-model="ConnectionForm.channel_name">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="inputChannel"
+                        placeholder="channel"
+                        ng-model="ConnectionForm.channel_name"
+                        ng-blur="updateConnectionDetails()"
+                    />
             </div>
             <div class="form-group">
                 <label for="inputEmail">@</label>
-                <input type="email" class="form-control" id="inputEmail" placeholder="email" ng-model="ConnectionForm.user_email">
+                <input
+                        type="email"
+                        class="form-control"
+                        id="inputEmail"
+                        placeholder="email"
+                        ng-model="ConnectionForm.user_email"
+                        ng-blur="updateConnectionDetails()"
+                    />
             </div>
             <div class="form-group">
                 <label for="inputName">name</label>
-                <input type="text" class="form-control" id="inputName" placeholder="name" ng-model="ConnectionForm.user_name">
+                <input
+                        type="text"
+                        class="form-control"
+                        id="inputName"
+                        placeholder="name"
+                        ng-model="ConnectionForm.user_name"
+                        ng-blur="updateConnectionDetails()"
+                    />
             </div>
             <div class="checkbox" style="display: none">
                 <label>
@@ -23,7 +44,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <button class="btn btn-default" ng-click="updateConnection()">Go!</button>
+                <button class="btn btn-default" ng-click="updateConnectionDetails()">Go!</button>
             </div>
         </form>
     </h1>

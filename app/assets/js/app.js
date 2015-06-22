@@ -51,41 +51,7 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         user_name : undefined
     }
 
-    $scope.$current_path = function(){
-        var path = $location.path.call($location);
-        var path_splited = path.split('/');
-        var result = [];
-        for(var k in path_splited) {
-            if (0 < path_splited[k].length) {
-                result.push(path_splited[k]);
-            }
-        }
-        return result;
-    };
-
-    $scope.$updateUrl = function() {
-        var url_parts = [];
-
-        if (angular.isDefined($scope.ConnectionData.channel_name)) {
-            url_parts.push($scope.ConnectionData.channel_name);
-            if (angular.isDefined($scope.ConnectionData.user_email)) {
-                url_parts.push($scope.ConnectionData.user_email);
-                if (angular.isDefined($scope.ConnectionData.user_name)) {
-                    url_parts.push($scope.ConnectionData.user_name);
-                }
-            }
-        }
-
-        var url = url_parts.join('/');
-
-        if (url.length > 0)
-        {
-            $location.path('/' + url);
-        }
-    }
-
-    $scope.updateConnection = function() {
-
+    $scope.updateConnectionDetails = function() {
         if (angular.isDefined($scope.ConnectionForm.channel_name) && 0 < $scope.ConnectionForm.channel_name.length) {
             $rootScope.ConnectionData.channel_name = $scope.ConnectionForm.channel_name;
             if (angular.isDefined($scope.ConnectionForm.user_email) && 0 < $scope.ConnectionForm.user_email.length) {
@@ -111,35 +77,57 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         $scope.$updateUrl();
     }
 
+    $scope.$updateUrl = function() {
+        var url_parts = [];
+
+        if (angular.isDefined($scope.ConnectionData.channel_name)) {
+            url_parts.push($scope.ConnectionData.channel_name);
+            if (angular.isDefined($scope.ConnectionData.user_email)) {
+                url_parts.push($scope.ConnectionData.user_email);
+                if (angular.isDefined($scope.ConnectionData.user_name)) {
+                    url_parts.push($scope.ConnectionData.user_name);
+                }
+            }
+        }
+
+        var url = url_parts.join('/');
+        $location.path('/' + url);
+    }
+
+    $scope.$current_path = function(){
+        var path = $location.path.call($location);
+        var path_splitted = path.split('/');
+        var result_list = [];
+        for(var k in path_splitted) {
+            if (0 < path_splitted[k].length) {
+                result_list.push(path_splitted[k]);
+            }
+        }
+
+        return result_list;
+    };
+
     $scope.$formValuesFromUrl = function() {
         var url_details = $scope.$current_path();
 
         $scope.ConnectionForm.channel_name = angular.isDefined(url_details[0]) ? url_details[0] : undefined;
         $scope.ConnectionForm.user_email = angular.isDefined(url_details[1]) ? url_details[1] : undefined;
         $scope.ConnectionForm.user_name = angular.isDefined(url_details[2]) ? url_details[2] : undefined;
-        $scope.updateConnection();
+        $scope.updateConnectionDetails();
     }
     $scope.$formValuesFromUrl();
-
-
-    socket.on('sync time', function(time) {
-        console.log( time );
-    });
 });
 
 pomodoroApp.controller('ChannelCtrl', function($scope, $rootScope, socket) {
     $scope.channel = {};
     $scope.pomodores = {};
 
-    $rootScope.$watchCollection('ConnectionData.channel_name', function(newValue){
-        if (undefined != newValue) {
-            $scope.channel.name = newValue;
-            socket.emit('pick pipe', {pipe : newValue});
-        }
+    $rootScope.$watchCollection('ConnectionData.channel_name', function(newValue) {
+        $scope.channel.name = newValue;
+        socket.emit('pick pipe', {pipe : newValue});
     });
 
     socket.on('users list', function(pomodores) {
-        console.log(pomodores);
         $scope.pomodores = pomodores;
     });
 });
@@ -234,7 +222,7 @@ pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket, $inte
                 text = 'waiting'
                 break;
             case 'paused':
-                text = 'paused'
+                text = 'idle'
                 break;
         }
         return text;
@@ -347,6 +335,7 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         {action : 'Stop', call_func : '$scope.stopTimer()', img_class : 'glyphicon-stop', text_class : 'colors-interval-break'}
     ];
     $scope.actions_intervals = [
+        {action : 'Restart 30/25', call_func : '$scope.startTimer(\'25\', 1800)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
         {action : 'Restart 20/25', call_func : '$scope.startTimer(\'25\', 1200)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
         {action : 'Restart 15/25', call_func : '$scope.startTimer(\'25\', 900)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
         {action : 'Restart 10/25', call_func : '$scope.startTimer(\'25\', 600)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
