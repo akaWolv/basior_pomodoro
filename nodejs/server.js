@@ -136,6 +136,7 @@ io.on('connection', function(socket){
     var stopDisconnectTimer = function() {
         if (undefined != socket.user && undefined != socket.user.email && undefined != disconnect_timers[socket.user.email]) {
             clearInterval(disconnect_timers[socket.user.email]);
+            delete disconnect_timers[socket.user.email];
             infoLog('DISCONNECT TIMER STOPPED', {email : socket.user.email});
         }
     }
@@ -150,7 +151,7 @@ io.on('connection', function(socket){
                 infoLog('DISCONNECT', {email : socket.user.email});
                 clearInterval(disconnect_timers[socket.user.email]);
                 delete disconnect_timers[socket.user.email];
-            }, 1800000);
+            }, 300000);
         }
     });
 
