@@ -27,6 +27,7 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
     <![endif]-->
 </head>
 
@@ -47,6 +48,7 @@
             <div ng-controller="UserCtrl">
                 <div ng-if="undefined != user.name" ng-include="'partials/user.html'"></div>
             </div>
+
         </div>
 
         <footer>
@@ -66,7 +68,8 @@
 
 <script src="assets/js/md5_generator.js"></script>
 
-<script src="http://pomodoro.new:3001/socket.io/socket.io.js" type="text/javascript"></script>
+<!-- @todo: <script src="http://pomodoro.new:3001/socket.io/socket.io.js" type="text/javascript"></script> -->
+<script src="http://pomodoro.devfuze.com:3001/socket.io/socket.io.js" type="text/javascript"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
