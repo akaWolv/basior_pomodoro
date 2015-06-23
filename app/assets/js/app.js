@@ -38,7 +38,7 @@ pomodoroApp.filter('secondsToDateTime', [function() {
     };
 }]);
 
-pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socket) {
+pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socket, $interval) {
     $rootScope.ConnectionData = {
         channel_name : undefined,
         user_email : undefined,
@@ -116,11 +116,13 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         $scope.updateConnectionDetails();
     }
     $scope.$formValuesFromUrl();
+
+    $interval(function(){ $rootScope.current_time = new Date(); }, 1000);
 });
 
 pomodoroApp.controller('ChannelCtrl', function($scope, $rootScope, socket) {
     $scope.channel = {};
-    $scope.pomodores = {};
+    $rootScope.pomodores = {};
 
     $rootScope.$watchCollection('ConnectionData.channel_name', function(newValue) {
         $scope.channel.name = newValue;
@@ -128,11 +130,11 @@ pomodoroApp.controller('ChannelCtrl', function($scope, $rootScope, socket) {
     });
 
     socket.on('users list', function(pomodores) {
-        $scope.pomodores = pomodores;
+        $rootScope.pomodores = pomodores;
     });
 });
 
-pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket, $interval) {
+pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket) {
     //$scope.pomodor = {
     //    current: 0,
     //    email: "",
@@ -144,8 +146,11 @@ pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket, $inte
     //    current_tme: ""
     //};
 
-    $scope.init = function(pomodor) {
-        $scope.pomodor = pomodor;
+    $scope.init = function(email) {
+        if (angular.isUndefined($rootScope.pomodores[email])) {
+            return false;
+        }
+        $scope.pomodor = $rootScope.pomodores[email];
         $scope.updateTimer();
 
         // current user
@@ -154,7 +159,7 @@ pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket, $inte
         }
     }
 
-    $scope.tick = function(){
+    $rootScope.$watch('current_time', function(newValue){
         if ('running' == $scope.pomodor.state) {
             if (0 >= $scope.pomodor.current) {
                 if ($scope.pomodor.email == $scope.ConnectionData.user_email) {
@@ -165,8 +170,7 @@ pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket, $inte
                 $scope.pomodor.current--;
             }
         }
-    }
-    $scope.counter = $interval(function(){ $scope.tick(); }, 1000);
+    });
 
     socket.on('user update ' + $scope.pomodor.email, function(details){
         $scope.pomodor = details;
