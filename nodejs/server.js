@@ -28,7 +28,7 @@ io.on('connection', function(socket){
 
             registerUserToPipe();
 
-            emitUsersListInChannel();
+            broadcastUsersListInChannel();
 
             infoLog('PIPE PICKED', {'pipe' : socket.picked_pipe});
         }
@@ -47,19 +47,21 @@ io.on('connection', function(socket){
             unregisterUserFromPipe();
 
             var alreadyConnected = false;
-            if (socket.user) {
+            console.log(socket.user);
+            if (undefined == socket.user) {
+                socket.user = details;
+            }
+            else {
                 alreadyConnected = true;
             }
 
-            socket.user = details;
-
             registerUserToPipe();
 
-            if (alreadyConnected) {
-                io.sockets.in(socket.picked_pipe).emit('user update ' + socket.user.email, socket.user);
+            if (true === alreadyConnected) {
+                broadcastUserUpdate();
             }
             else {
-                emitUsersListInChannel();
+                broadcastUsersListInChannel();
             }
 
             infoLog('USER CONNECTED', details);
@@ -75,17 +77,30 @@ io.on('connection', function(socket){
         }
 
         socket.user.interval = details.interval;
+        socket.user.seconds_left = details.seconds_left;
         socket.user.current = details.seconds_left;
         socket.user.state = details.state;
+        socket.user.started_on = new Date();
 
+        // add more info
         channels_users[socket.picked_pipe][socket.user.email] = socket.user;
-        channels_users[socket.picked_pipe][socket.user.email].started_on = new Date();
 
-        io.sockets.in(socket.picked_pipe).emit('user update ' + socket.user.email, socket.user);
+        broadcastUserUpdate();
 
         infoLog('CHANGE TIMER', details);
     });
 
+    socket.on('give me user list', function(){
+        if (undefined != socket.picked_pipe) {
+            addCurrentTimer();
+
+            socket.emit('users list', channels_users[socket.picked_pipe]);
+        }
+    });
+
+    var broadcastUserUpdate = function() {
+        io.sockets.in(socket.picked_pipe).emit('user update ' + socket.user.email, socket.user);
+    }
 
     var registerUserToPipe = function() {
         if (undefined != socket.picked_pipe && undefined != socket.user && undefined != socket.user.email) {
@@ -109,7 +124,7 @@ io.on('connection', function(socket){
         }
     }
 
-    var emitUsersListInChannel = function() {
+    var broadcastUsersListInChannel = function() {
         if (undefined != socket.picked_pipe) {
             addCurrentTimer();
 
@@ -133,10 +148,11 @@ io.on('connection', function(socket){
         console.log(logDate + '|' + log_name + '|' + JSON.stringify(info_log));
     }
 
+    // @todo
     var stopDisconnectTimer = function() {
-        if (undefined != socket.user && undefined != socket.user.email && undefined != disconnect_timers[socket.user.email]) {
-            clearInterval(disconnect_timers[socket.user.email]);
-            delete disconnect_timers[socket.user.email];
+        if (undefined != socket.user && undefined != socket.user.email && undefined != disconnect_timers[socket.picked_pipe] && undefined != disconnect_timers[socket.picked_pipe][socket.user.email]) {
+            clearInterval(disconnect_timers[socket.picked_pipe][socket.user.email]);
+            delete disconnect_timers[socket.picked_pipe][socket.user.email];
             infoLog('DISCONNECT TIMER STOPPED', {email : socket.user.email});
         }
     }
@@ -145,12 +161,17 @@ io.on('connection', function(socket){
         if (undefined != socket.user && undefined != socket.user.email) {
 
             infoLog('DISCONNECT TIMER STARTED 5\'', {email : socket.user.email});
-            disconnect_timers[socket.user.email] = setInterval(function(){
-                unregisterUserFromPipe();
-                emitUsersListInChannel();
-                infoLog('DISCONNECT', {email : socket.user.email});
-                clearInterval(disconnect_timers[socket.user.email]);
-                delete disconnect_timers[socket.user.email];
+            if (undefined == disconnect_timers[socket.picked_pipe]) {
+                disconnect_timers[socket.picked_pipe] = {};
+            }
+
+            disconnect_timers[socket.picked_pipe][socket.user.email] = setInterval(function(){
+                //unregisterUserFromPipe();
+                //broadcastUsersListInChannel();
+                //infoLog('DISCONNECT', {email : socket.user.email});
+                infoLog('SHOULD DISCONNECT', {email : socket.user.email});
+                //clearInterval(disconnect_timers[socket.user.email]);
+                //delete disconnect_timers[socket.user.email];
             }, 300000);
         }
     });

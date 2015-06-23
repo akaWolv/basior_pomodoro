@@ -18,7 +18,15 @@
                     class="{{pomodorClass()}}"
                 >
                 <span ng-switch-when="running">
-                    {{pomodor.current | secondsToDateTime | date : 'm:ss'}}
+                    <span ng-switch="timer_running">
+                        <span ng-switch-when="false">
+                            <span class="glyphicon glyphicon-refresh" aria-hidden="true" style="font-size: .7em;"></span>
+                            <!--<img src="assets/img/al_green2.gif" alt="loading..."/>-->
+                        </span>
+                        <span ng-switch-when="true">
+                            {{pomodor.current | secondsToDateTime | date : 'm:ss'}}
+                        </span>
+                    </span>
                 </span>
                 <span ng-switch-when="stopped">
                     stopped

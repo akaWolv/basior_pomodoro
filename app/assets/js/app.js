@@ -8,7 +8,7 @@ pomodoroApp.factory('socket', function ($rootScope, $location) {
     {
         return false;
     }
-
+// @todo: time sync?
     var socket = io.connect($location.host() + ':3001');
     return {
         on: function (eventName, callback) {
@@ -38,7 +38,13 @@ pomodoroApp.filter('secondsToDateTime', [function() {
     };
 }]);
 
-pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socket, $interval) {
+pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socket, $interval, $window) {
+    // @todo?
+    //$window.onfocus = function(){
+        //console.log("focused");
+        //socket.emit('give me user list');
+    //}
+
     $rootScope.ConnectionData = {
         channel_name : undefined,
         user_email : undefined,
@@ -117,7 +123,10 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
     }
     $scope.$formValuesFromUrl();
 
-    $interval(function(){ $rootScope.current_time = new Date(); }, 1000);
+    $interval(function(){
+        $rootScope.current_time = new Date();
+        $rootScope.timer_running = true;
+    }, 1000);
 });
 
 pomodoroApp.controller('ChannelCtrl', function($scope, $rootScope, socket) {
@@ -130,6 +139,7 @@ pomodoroApp.controller('ChannelCtrl', function($scope, $rootScope, socket) {
     });
 
     socket.on('users list', function(pomodores) {
+        $rootScope.timer_running = false;
         $rootScope.pomodores = pomodores;
     });
 });
@@ -141,40 +151,65 @@ pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket) {
     //    interval: "",
     //    md5_hash: "",
     //    name: "",
-    //    state: "",
+    //    state: "", running/stopped/paused
     //    started_on: "",
     //    current_tme: ""
     //};
+    $scope.is_current_user_counter = false;
 
     $scope.init = function(email) {
         if (angular.isUndefined($rootScope.pomodores[email])) {
             return false;
         }
         $scope.pomodor = $rootScope.pomodores[email];
-        $scope.updateTimer();
+        //$scope.updateTimer();
 
         // current user
         if ($scope.pomodor.email == $scope.ConnectionData.user_email) {
             $rootScope.current_user = $scope.pomodor;
         }
+
+        $scope.calculateCurrentTimeDiff($scope.pomodor.started_on, $rootScope.current_time);
+
+        $scope.is_current_user_counter = $scope.pomodor.email == $scope.ConnectionData.user_email;
     }
 
     $rootScope.$watch('current_time', function(newValue){
-        if ('running' == $scope.pomodor.state) {
-            if (0 >= $scope.pomodor.current) {
-                if ($scope.pomodor.email == $scope.ConnectionData.user_email) {
-                    $rootScope.timerUp = true;
-                }
-            }
-            else {
-                $scope.pomodor.current--;
-            }
-        }
+        $scope.calculateCurrentTimeDiff($scope.pomodor.started_on, newValue);
     });
 
     socket.on('user update ' + $scope.pomodor.email, function(details){
         $scope.pomodor = details;
     });
+
+    $rootScope.$watchCollection('pomodores', function(newValue){
+        if (angular.isDefined(newValue[$scope.pomodor.email]))
+        {
+            $scope.pomodor = newValue[$scope.pomodor.email];
+        }
+    });
+
+    $scope.calculateCurrentTimeDiff = function(startedOn, currentTime) {
+        var a = new Date(startedOn);
+        var b = new Date(currentTime);
+        var secondsDiff = parseFloat(b - a) / 1000
+        if ('running' == $scope.pomodor.state && false === isNaN(secondsDiff)) {
+            if (secondsDiff > $scope.pomodor.seconds_left) {
+                $scope.pomodor.current = 0;
+                if (true === $scope.is_current_user_counter){
+                    // @todo: current_user?
+                    $rootScope.timerUp = true;
+                }
+            }
+            else {
+                $scope.pomodor.current = $scope.pomodor.seconds_left - secondsDiff;
+            }
+        }
+
+        if ($scope.is_current_user_counter) {
+            $rootScope.current_user.current = $scope.pomodor.current;
+        }
+    }
 
     $scope.pomodorClass = function() {
         var name = '';
@@ -231,21 +266,6 @@ pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket) {
         }
         return text;
     }
-
-    $scope.updateTimer = function() {
-        var date1 = new Date($scope.pomodor.started_on);
-        var date2 = new Date($scope.pomodor.current_time);
-
-        var diff = date2 - date1;
-        var diffSeconds = diff / 1000;
-        if (NaN != diffSeconds && 0 < $scope.pomodor.current - diffSeconds) {
-            $scope.pomodor.current -= diffSeconds;
-        }
-        else {
-            $scope.pomodor.current = 0;
-            $scope.pomodor.state = 'stopped';
-        }
-    }
 });
 
 pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
@@ -292,6 +312,9 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         $scope.user.name = $rootScope.ConnectionData.user_name;
         $scope.user.email = $rootScope.ConnectionData.user_email;
 
+        //$scope.user.seconds_left = 0;
+        $scope.user.state = 'stopped';
+
         if (angular.isDefined($scope.user.email) && angular.isUndefined($scope.user.name)) {
             var splited = $scope.user.email.split('@');
             $scope.user.name = splited[0];
@@ -299,25 +322,14 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
 
         if (angular.isDefined($scope.user.email) && angular.isDefined($scope.user.name)) {
             $scope.user.md5_hash = calcMD5($scope.user.email);
+
             socket.emit('connect user', $scope.user);
         }
 
-
         socket.on('user update ' + $scope.user.email, function(details){
+            console.log(details);
             $scope.user = details;
         });
-    });
-
-    $rootScope.$watchCollection('current_user', function(newValue){
-        if (undefined != newValue)
-        {
-            $scope.user.current = newValue.current;
-            $scope.user.interval = newValue.interval;
-            $scope.user.state = newValue.state;
-            $scope.user.md5_hash = newValue.md5_hash;
-
-            socket.emit('change timer', {state : $scope.user.state, interval : $scope.user.interval, seconds_left : $scope.user.current});
-        }
     });
 
     $scope.startTimer = function(interval, secondsLeft) {
@@ -330,8 +342,11 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         if (true === $scope.paused) {
             socket.emit('change timer', {state : 'paused', interval : $scope.user.interval, seconds_left : $scope.user.current});
         }
+        else if (0 == $scope.user.seconds_left) {
+            $scope.stopTimer();
+        }
         else {
-            socket.emit('change timer', {state : 'running', interval : $scope.user.interval, seconds_left : $scope.user.current});
+            socket.emit('change timer', {state : 'running', interval : $scope.user.interval, seconds_left : $scope.user.seconds_left});
         }
     }
 
@@ -341,18 +356,30 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
     }
 
     $scope.actions = [
-        {action : 'Start 25', call_func : '$scope.startTimer(\'25\', 1500)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'Start 5', call_func : '$scope.startTimer(\'5\', 300)', img_class : 'glyphicon-play', text_class : 'colors-interval-5'},
-        {action : 'Pause', call_func : '$scope.pauseTimer()', img_class : 'glyphicon-pause', text_class : 'colors-interval-pause'},
-        {action : 'Stop', call_func : '$scope.stopTimer()', img_class : 'glyphicon-stop', text_class : 'colors-interval-break'}
+        {action : 'start_25_25', text : 'Start 25', call_func : '$scope.startTimer(\'25\', 1500)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
+        {action : 'start_5_5', text : 'Start 5', call_func : '$scope.startTimer(\'5\', 300)', img_class : 'glyphicon-play', text_class : 'colors-interval-5'},
+        {action : 'start_pause', text : 'Pause', call_func : '$scope.pauseTimer()', img_class : 'glyphicon-pause', text_class : 'colors-interval-pause'},
+        {action : 'resume_pause', text : 'Resume', call_func : '$scope.pauseTimer()', img_class : 'glyphicon-play', text_class : 'colors-interval-pause'},
+        {action : 'start_stop', text : 'Stop', call_func : '$scope.stopTimer()', img_class : 'glyphicon-stop', text_class : 'colors-interval-break'}
     ];
     $scope.actions_intervals = [
-        {action : 'Restart 30/25', call_func : '$scope.startTimer(\'25\', 1800)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'Restart 20/25', call_func : '$scope.startTimer(\'25\', 1200)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'Restart 15/25', call_func : '$scope.startTimer(\'25\', 900)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'Restart 10/25', call_func : '$scope.startTimer(\'25\', 600)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'Restart 5/25', call_func : '$scope.startTimer(\'25\', 300)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}
+        {action : 'restart_30_25', text : 'Restart 30/25', call_func : '$scope.startTimer(\'25\', 1800)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
+        {action : 'restart_20_25', text : 'Restart 20/25', call_func : '$scope.startTimer(\'25\', 1200)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
+        {action : 'restart_15_25', text : 'Restart 15/25', call_func : '$scope.startTimer(\'25\', 900)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
+        {action : 'restart_10_25', text : 'Restart 10/25', call_func : '$scope.startTimer(\'25\', 600)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
+        {action : 'restart_5_25', text : 'Restart 5/25', call_func : '$scope.startTimer(\'25\', 300)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
+        {action : 'restart_xx_25', text : 'Restart ...', call_func : '$scope.startTimer(\'25\', 3)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}
     ];
+
+    $scope.isActionVisible = function(action) {
+        switch (action) {
+            case 'start_pause':
+                return $scope.user.state != 'paused';
+            case 'resume_pause':
+                return $scope.user.state == 'paused';
+        }
+        return true;
+    }
 
     $scope.call = function(func) {
         eval(func);
