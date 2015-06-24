@@ -280,6 +280,15 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
     $scope.user = {};
     $scope.paused = false;
 
+    $rootScope.$watchCollection('pomodores', function(newValue, oldValue){
+        if (undefined != newValue && newValue[$scope.user.email] != oldValue[$scope.user.email]) {
+            $scope.user = newValue[$scope.user.email];
+            if ($scope.user.state == 'paused') {
+                $scope.paused = true;
+            }
+        }
+    });
+
     $rootScope.$watch('timerUp', function(newValue){
         if (true === newValue)
         {
@@ -312,7 +321,7 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         $scope.user.name = $rootScope.ConnectionData.user_name;
         $scope.user.email = $rootScope.ConnectionData.user_email;
 
-        //$scope.user.seconds_left = 0;
+        $scope.user.seconds_left = 0;
         $scope.user.state = 'stopped';
 
         if (angular.isDefined($scope.user.email) && angular.isUndefined($scope.user.name)) {
@@ -327,7 +336,6 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         }
 
         socket.on('user update ' + $scope.user.email, function(details){
-            console.log(details);
             $scope.user = details;
         });
     });
@@ -367,8 +375,8 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         {action : 'restart_20_25', text : 'Restart 20/25', call_func : '$scope.startTimer(\'25\', 1200)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
         {action : 'restart_15_25', text : 'Restart 15/25', call_func : '$scope.startTimer(\'25\', 900)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
         {action : 'restart_10_25', text : 'Restart 10/25', call_func : '$scope.startTimer(\'25\', 600)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'restart_5_25', text : 'Restart 5/25', call_func : '$scope.startTimer(\'25\', 300)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'},
-        {action : 'restart_xx_25', text : 'Restart ...', call_func : '$scope.startTimer(\'25\', 3)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}
+        {action : 'restart_5_25', text : 'Restart 5/25', call_func : '$scope.startTimer(\'25\', 300)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}//,
+        //{action : 'restart_xx_25', text : 'Restart ...', call_func : '$scope.startTimer(\'25\', 3)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}
     ];
 
     $scope.isActionVisible = function(action) {

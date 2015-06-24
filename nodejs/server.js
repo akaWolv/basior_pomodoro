@@ -46,23 +46,18 @@ io.on('connection', function(socket){
             // jezeli user podal juz dane
             unregisterUserFromPipe();
 
-            var alreadyConnected = false;
-            console.log(socket.user);
-            if (undefined == socket.user) {
-                socket.user = details;
+            if (true === getUserFromPipe(details.email)) {
+                alreadyConnected = true;
             }
             else {
-                alreadyConnected = true;
+                socket.user = details;
             }
 
             registerUserToPipe();
 
-            if (true === alreadyConnected) {
-                broadcastUserUpdate();
-            }
-            else {
-                broadcastUsersListInChannel();
-            }
+            broadcastUserUpdate();
+
+            broadcastUsersListInChannel();
 
             infoLog('USER CONNECTED', details);
         }
@@ -98,14 +93,26 @@ io.on('connection', function(socket){
         }
     });
 
+    var getUserFromPipe = function(email) {
+        if (undefined != socket.picked_pipe && undefined != channels_users[socket.picked_pipe] && undefined != channels_users[socket.picked_pipe][email]) {
+            socket.user = channels_users[socket.picked_pipe][email];
+            return true;
+        }
+        return false;
+    }
+
     var broadcastUserUpdate = function() {
         io.sockets.in(socket.picked_pipe).emit('user update ' + socket.user.email, socket.user);
     }
 
     var registerUserToPipe = function() {
-        if (undefined != socket.picked_pipe && undefined != socket.user && undefined != socket.user.email) {
-            channels_users[socket.picked_pipe][socket.user.email] = socket.user;
+        if (undefined == channels_users[socket.picked_pipe]) {
+            channels_users[socket.picked_pipe] = {};
+        }
 
+        if (undefined != socket.picked_pipe && undefined != socket.user && undefined != socket.user.email && undefined != channels_users[socket.picked_pipe]) {
+
+            channels_users[socket.picked_pipe][socket.user.email] = socket.user;
             infoLog('USER REGISTERED TO PIPE', {pipe : socket.picked_pipe, user : socket.user.email});
         }
     }
