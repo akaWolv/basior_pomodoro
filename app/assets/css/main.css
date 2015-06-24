@@ -92,6 +92,7 @@ h4 {
   	bottom: 0;
   	z-index: 11;
 	width: 350px;
+	padding: 0 15px;
 	background-color: #e4262c;
 	color: #fff;
 	left: -350px;
@@ -115,7 +116,7 @@ h4 {
 	width: 50px;
 	height: 50px;
 	background-color: #e4262c;
-	z-index: 11;
+	z-index: 12;
 }
 
 .user-menu-toggle .line {
@@ -159,23 +160,19 @@ h4 {
 	top: 23px;
 }
 
-.user-menu-content {
-	padding: 0 15px;
-}
-
 .user-menu label {
-	width: 70px;
-	text-align: right;
+	width: 40px;
+	text-align: center;
 	vertical-align: middle;
 	font-size: 24px;
 	font-weight: 400;
-	padding-right: 10px;
+	padding-top: 5px;
 }
 
 .user-menu input[type=text],
 .user-menu input[type=email],
 .user-menu button {
-	width: 220px;
+	width: 250px;
 	border: 1px solid #e4262c;
 	border-radius: 0;
 }
@@ -186,12 +183,13 @@ h4 {
 	border: 1px solid #e4262c;
 }
 
-.form-group.title {
-	margin-left: 77px;
+.glyphicon-user {
+	font-size: 18px;
 }
 
+.form-group.title,
 .form-group.button {
-	margin-left: 77px;
+	margin-left: 47px;
 }
 
 .form-control {

@@ -3,6 +3,8 @@ $(document).ready(function () {
         $('.row-offcanvas').toggleClass('active')
     });
 
+    $(".user-menu-toggle").html('<div class="line line-top"></div><div class="line line-middle"></div><div class="line line-bottom"></div>');
+
     var $lineTop 	= $('.user-menu-toggle .line-top'),
     	$lineMiddle = $('.user-menu-toggle .line-middle'),
     	$lineBottom = $('.user-menu-toggle .line-bottom'),
