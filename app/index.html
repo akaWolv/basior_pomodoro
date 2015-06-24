@@ -7,21 +7,37 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="assets/bootstrap/favicon.ico">
+    <!-- <link rel="icon" href="assets/bootstrap/favicon.ico"> -->
 
     <title>Pomodoro</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="assets/css/offcanvas.css" rel="stylesheet">
+
+    <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]>
     <script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600|Lato:100,300,400,700|Open+Sans:400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+    <!-- fav icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/img/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/img/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/img/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/img/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/icons/apple-icon-120x120.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/img/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/icons/favicon-16x16.png">
+    <!-- <link rel="icon" href="assets/img/icons/favicon.ico"> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,21 +47,37 @@
     <![endif]-->
 </head>
 
-<body>
+<body ng-controller="MainCtrl">
+
+<div class="bg-layer"></div>
+<div class="top-nav" ng-controller="ChannelCtrl">
+    <h2>#{{channel.name}} - Pomodoro!</h2>
+
+    <div class="user-info" ng-controller="UserCtrl">
+        <img class="img-circle" ng-src="http://www.gravatar.com/avatar/{{user.md5_hash}}">
+        <p class="user-name">{{user.name}} ({{user.email}})</p>
+    </div>
+</div>
+
+<nav class="user-menu-toggle">
+    <div class="line line-top"></div>
+    <div class="line line-middle"></div>
+    <div class="line line-bottom"></div>
+</nav>
+<div class="hide user-menu">
+    <div class="user-menu-content">
+        <span ng-include="'partials/start.html'"></span>
+    </div>
+</div>
 
 <div class="container">
-    <h1 class="text-center">Pomodoro!</h1>
     <div class="col-xs-12 col-sm-12">
-        <div
-                class="row row-offcanvas row-offcanvas-right"
-                ng-controller="MainCtrl"
-            >
+        <div class="row row-offcanvas row-offcanvas-right">
             <!--<span ng-bind="$current_path()"></span>-->
-            <span ng-include="'partials/start.html'"></span>
             <div ng-controller="ChannelCtrl">
                 <div ng-if="undefined != channel.name" ng-include="'partials/channel.html'"></div>
             </div>
-            <div ng-controller="UserCtrl">
+            <div class="time-nav" ng-controller="UserCtrl">
                 <div ng-if="undefined != user.name" ng-include="'partials/user.html'"></div>
             </div>
 
