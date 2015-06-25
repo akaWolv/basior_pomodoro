@@ -83,6 +83,33 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         $scope.$updateUrl();
     }
 
+    $scope.closeMenu = function() {
+        var $lineTop     = $('.user-menu-toggle .line-top'),
+            $lineMiddle  = $('.user-menu-toggle .line-middle'),
+            $lineBottom  = $('.user-menu-toggle .line-bottom'),
+            time        = 200,
+            rotateClass = 'rotate',
+            hoverClass  = 'hover';
+
+        $(".user-menu").toggleClass("user-menu-display");
+        $(".user-menu").removeClass("hide");
+        $(".bg-layer").toggleClass("show");
+
+        var transitionTop    = $lineTop.removeClass(rotateClass),
+            transitionMiddle = $lineMiddle.removeClass(rotateClass),
+            transitionBottom = $lineBottom.removeClass(rotateClass);
+
+        setTimeout(function() {
+            transitionTop.removeClass(hoverClass);
+        }, time);
+        setTimeout(function() {
+            transitionMiddle.removeClass(hoverClass);
+        }, time);
+        setTimeout(function() {
+            transitionBottom.removeClass(hoverClass);
+        }, time);
+    }
+
     $scope.$updateUrl = function() {
         var url_parts = [];
 
