@@ -24,6 +24,11 @@ pomodoroApp.factory('socket', function ($rootScope, $location, $interval) {
     socket.on('connect', function() {
         failures = 0;
         $rootScope.errorBlend(false);
+
+        if (angular.isDefined($rootScope.ConnectionData.picked_pipe) || angular.isDefined($rootScope.ConnectionData.user_email)) {
+            // check if user is registered
+            socket.emit('who am i');
+        }
     });
 
     // keep connection up
@@ -223,6 +228,15 @@ pomodoroApp.controller('ChannelCtrl', function($scope, $rootScope, socket) {
         $rootScope.timer_running = false;
         $rootScope.pomodores = pomodores;
     });
+
+    socket.on('you picked pipe', function(picked_pipe){
+        if (null == picked_pipe && angular.isDefined($scope.channel.name)) {
+            // it means that server know nothing about us
+            $scope.updateConnectionDetails();
+
+            socket.emit('pick pipe', {pipe : $scope.channel.name});
+        }
+    });
 });
 
 pomodoroApp.controller('PomodorCtrl', function($scope, $rootScope, socket) {
@@ -370,6 +384,20 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         }
     });
 
+    socket.on('your details', function(details){
+        if (null == details && angular.isDefined($scope.user)) {
+            // it means that server know nothing about us
+            $scope.updateConnectionDetails();
+
+            socket.emit('connect user', $scope.user);
+            console.log('resend user details');
+        }
+    });
+
+    socket.on('user update ' + $scope.user.email, function(details){
+        $scope.user = details;
+    });
+
     $rootScope.$watch('timerUp', function(newValue){
         if (true === newValue)
         {
@@ -380,7 +408,7 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
                         $scope.startTimer('5', 300);
                     }
                     else {
-                        // @todo: this is added to prevent confirm() lopp if socket failed
+                        // @todo: this is added to prevent confirm() loop if socket failed
                         $scope.user.state = 'stopped';
                     }
                     break;
@@ -389,7 +417,7 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
                         $scope.startTimer('25', 1500);
                     }
                     else {
-                        // @todo: this is added to prevent confirm() lopp if socket failed
+                        // @todo: this is added to prevent confirm() loop if socket failed
                         $scope.user.state = 'stopped';
                     }
                     break;
@@ -398,9 +426,9 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
         $rootScope.timerUp = undefined;
     });
 
-    $rootScope.$watchCollection('ConnectionData', function(){
-        $scope.user.name = $rootScope.ConnectionData.user_name;
-        $scope.user.email = $rootScope.ConnectionData.user_email;
+    $rootScope.$watchCollection('ConnectionData', function(newValue){
+        $scope.user.name = newValue.user_name;
+        $scope.user.email = newValue.user_email;
 
         $scope.user.seconds_left = 0;
         $scope.user.state = 'stopped';
@@ -415,11 +443,8 @@ pomodoroApp.controller('UserCtrl', function($scope, $rootScope, socket) {
 
             socket.emit('connect user', $scope.user);
         }
-
-        socket.on('user update ' + $scope.user.email, function(details){
-            $scope.user = details;
-        });
     });
+
 
     $scope.startTimer = function(interval, secondsLeft) {
         $scope.paused = false;

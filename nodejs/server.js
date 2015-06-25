@@ -93,6 +93,25 @@ io.on('connection', function(socket){
         }
     });
 
+    socket.on('who am i', function(){
+        socket.emit('your details', socket.user );
+        socket.emit('you picked pipe', socket.picked_pipe);
+        socket.emit('are you connected to pipe', checkIsUserConnectedToPipe());
+
+        infoLog('ASKED FOR DETAILS');
+    });
+
+    var checkIsUserConnectedToPipe = function() {
+        if (
+            undefined == socket.user
+            || undefined == socket.user.email
+            || undefined == channels_users[socket.picked_pipe][socket.user.email]
+        ) {
+            return false;
+        }
+        return true;
+    }
+
     var getUserFromPipe = function(email) {
         if (undefined != socket.picked_pipe && undefined != channels_users[socket.picked_pipe] && undefined != channels_users[socket.picked_pipe][email]) {
             socket.user = channels_users[socket.picked_pipe][email];
@@ -103,6 +122,8 @@ io.on('connection', function(socket){
 
     var broadcastUserUpdate = function() {
         io.sockets.in(socket.picked_pipe).emit('user update ' + socket.user.email, socket.user);
+
+        infoLog('USERS BROADCASTED');
     }
 
     var registerUserToPipe = function() {
