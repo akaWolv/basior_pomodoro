@@ -1,15 +1,34 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-var pomodoroApp = angular.module('PomodoroApp', []);
+var pomodoroApp = angular.module('PomodoroApp', ['ngSanitize']);
 
-pomodoroApp.factory('socket', function ($rootScope, $location) {
+pomodoroApp.factory('socket', function ($rootScope, $location, $interval) {
     if ('undefined' === typeof io)
     {
         return false;
     }
+    var failures = 0;
 // @todo: time sync?
     var socket = io.connect($location.host() + ':3001');
+    socket.on('connect_error', function() {
+        failures += 1;
+        $rootScope.errorBlend(true,
+            'Socket went away :( ' +
+            '<br /> ' +
+            'reconnecting... ' +
+            '<br /> <br /> ' +
+            (failures > 1 ? 'Tried ' + failures + ' times so far...' : '')
+        );
+    });
+    socket.on('connect', function() {
+        failures = 0;
+        $rootScope.errorBlend(false);
+    });
+
+    // keep connection up
+    $interval(function(){ socket.emit('i am awake'); }, 30000);
+
     return {
         on: function (eventName, callback) {
             socket.on(eventName, function () {
@@ -44,6 +63,17 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         //console.log("focused");
         //socket.emit('give me user list');
     //}
+    $rootScope.error_blend = false;
+    $rootScope.error_blend_text = '';
+    $rootScope.errorBlend = function(status, text) {
+        $rootScope.error_blend = true === status;
+
+        if (angular.isString(text)){
+            $rootScope.error_blend_text = text;
+        } else {
+            $rootScope.error_blend_text = '';
+        }
+    };
 
     $rootScope.ConnectionData = {
         channel_name : undefined,
