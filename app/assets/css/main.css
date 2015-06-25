@@ -1,5 +1,254 @@
+/**
+ *	available fonts
+ *	font-family: 'Source Sans Pro', sans-serif;
+ *	font-family: 'Lato', sans-serif;
+ *	font-family: 'Open Sans', sans-serif;
+ */
+
+/* rafalsoisnki css */
+body {
+	font-family: 'Source Sans Pro', sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+	line-height: 1.3;
+}
+
+h1 {
+	margin-top: 10px;
+}
+
+h1 {
+	margin-bottom: 5px;
+}
+
+h2 {
+	margin: 5px 0;
+}
+
+h4 {
+	padding: 5px;
+	margin-top: 0;
+}
+
+.btn {
+	border-radius: 0;
+	border: none;
+}
+
+.app-title {
+	margin-top: 10px;
+}
+
+.app-logo img {
+	max-width: 80px;
+}
+
+.bg-layer {
+	display: none;
+	position: absolute;
+	background: rgba(0,0,0,.5);
+	z-index: 9;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+/* user menu */
+@keyframes fadeIn {
+    from { left: -350px; }
+      to { left: 0; }
+}
+
+@keyframes fadeOut {
+    from { left: 0; }
+      to { left: -350px; }
+}
+.top-nav {
+	background-color: #e4262c;
+	color: #fff;
+	height: 50px;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 11;
+}
+
+.top-nav h2 {
+	margin: 0 60px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 18px;
+	text-transform: uppercase;
+	font-weight: 600;
+}
+
+.user-menu {
+	position: absolute;
+	top: 50px;
+	left: 0;
+  	bottom: 0;
+  	z-index: 11;
+	width: 350px;
+	padding: 0 15px;
+	background-color: #e4262c;
+	color: #fff;
+	left: -350px;
+    animation: fadeOut .3s;
+}
+
+.user-menu-display {
+	display: block;
+	left: 0;
+    animation: fadeIn .3s;
+}
+
+.user-menu p {
+	padding: 0 10px;
+}
+
+.user-menu-toggle {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50px;
+	height: 50px;
+	background-color: #e4262c;
+	z-index: 12;
+}
+
+.user-menu-toggle .line {
+	position: absolute;
+	background: #fff;
+	height: 4px;
+	width: 30px;
+	margin: 0 auto;
+	left: calc(50% - 15px);
+	/*transition: top .3s;*/
+	transition: all .2s;
+}
+
+.user-menu-toggle .line-top.rotate {
+	transform: rotate(45deg);
+}
+
+.user-menu-toggle .line-middle.rotate {
+	transform: rotate(45deg);
+}
+
+.user-menu-toggle .line-bottom.rotate {
+	transform: rotate(135deg);
+}
+
+
+.user-menu-toggle .line-top {
+	top: 13px;
+}
+
+.user-menu-toggle .line-middle {
+	top: 22px;
+}
+
+.user-menu-toggle .line-bottom {
+	top: 31px;
+}
+
+.user-menu-toggle .line-top.hover,
+.user-menu-toggle .line-bottom.hover {
+	top: 23px;
+}
+
+.user-menu label {
+	width: 40px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 24px;
+	font-weight: 400;
+	padding-top: 5px;
+}
+
+.user-menu input[type=text],
+.user-menu input[type=email],
+.user-menu button {
+	width: 250px;
+	border: 1px solid #e4262c;
+	border-radius: 0;
+}
+
+.user-menu .btn-default:hover,
+.user-menu .btn-default:active,
+.user-menu .btn-default:focus {
+	border: 1px solid #e4262c;
+}
+
+.glyphicon-user {
+	font-size: 18px;
+}
+
+.form-group.title,
+.form-group.button {
+	margin-left: 47px;
+}
+
+.form-control {
+	height: 42px;
+}
+
+.block {
+	display: block;
+	width: 100%;
+}
+
+.user-info {
+	position: fixed;
+	top: 0;
+	right: 15px;
+}
+
+.user-info img {
+	float: right;
+	height: 40px;
+	margin-top: 5px;
+}
+
+.user-name {
+	float: left;
+	margin-right: 15px;
+	line-height: 50px;
+	font-size: 18px;
+  	text-transform: uppercase;
+  	font-weight: 600;
+}
+
+
+.time-nav {
+	position: fixed;
+	bottom: 0;
+	width: 1170px;
+	margin-bottom: 20px;
+}
+
+footer {
+	position: fixed;
+	right: 10px;
+	bottom: 0;
+}
+
+.btn {
+	padding: 10px 12px;
+}
+
+.btn:hover {
+	background: #333;
+	color: #fff;
+}
+
+/* wolv css */
 .colors-interval-25 {
-    background-color: indianred;
+    /*background-color: indianred;*/
+    background-color: #e4262c;
     color: ghostwhite
 }
 .colors-interval-5 {
