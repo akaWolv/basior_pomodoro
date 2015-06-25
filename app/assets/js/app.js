@@ -58,7 +58,7 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
     }
 
     $scope.$checkIfUserLogged = function() {
-        if ( angular.isDefined($scope.ConnectionForm.channel_name) == false || angular.isDefined($scope.ConnectionForm.user_email) == false) {
+        if ( angular.isDefined($scope.ConnectionForm.channel_name) == false) {
 
             var $lineTop    = $('.user-menu-toggle .line-top'),
                 $lineMiddle = $('.user-menu-toggle .line-middle'),
