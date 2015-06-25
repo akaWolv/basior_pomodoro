@@ -53,11 +53,20 @@
 <nav class="user-menu-toggle"></nav>
 
 <div class="top-nav" ng-controller="ChannelCtrl">
-    <h2>#{{channel.name}} - Pomodoro!</h2>
+    <h2 ng-switch="undefined == channel.name">
+        <span ng-switch-when="false">
+            #{{channel.name}} - Pomodoro!
+        </span>
+        <span ng-switch-default>
+            Hello Pomodoro!
+        </span>
+    </h2>
 
     <div class="user-info" ng-controller="UserCtrl">
-        <img class="img-circle" ng-src="http://www.gravatar.com/avatar/{{user.md5_hash}}">
-        <p class="user-name">{{user.name}} ({{user.email}})</p>
+        <span ng-if="undefined != user.email">
+            <img class="img-circle" ng-src="http://www.gravatar.com/avatar/{{user.md5_hash}}">
+            <p class="user-name">{{user.name}} ({{user.email}})</p>
+        </span>
     </div>
 </div>
 
