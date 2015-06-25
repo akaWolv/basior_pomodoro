@@ -101,11 +101,7 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
 
         setTimeout(function() {
             transitionTop.removeClass(hoverClass);
-        }, time);
-        setTimeout(function() {
             transitionMiddle.removeClass(hoverClass);
-        }, time);
-        setTimeout(function() {
             transitionBottom.removeClass(hoverClass);
         }, time);
     }
