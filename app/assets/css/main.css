@@ -245,6 +245,53 @@ footer {
 	color: #fff;
 }
 
+
+
+/* status changed notification */
+.notify {
+	position: absolute;
+	z-index: 9;
+	display: none;
+	background: #e4262c;
+	top: 50px;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.user-notify {
+  	margin: 0 auto;
+  	position: relative;
+  	color: #fff;
+  	height: 100%;
+  	width: 100%;
+}
+
+.user-notify .center {
+  	display: block;
+  	position: absolute;
+  	width: 400px;
+  	top: calc(50% - 50px);
+	transform: translateY( calc(-50% + 50px) );
+	left: calc(50% - 200px);
+	text-align: center;
+}
+
+.user-notify .center img {
+	vertical-align: middle;
+	margin: 0 auto;
+	display: block;
+	margin-bottom: 20px;
+}
+
+.user-notify .center span {
+	font-size: 56px;
+	vertical-align: middle;
+	font-weight: 100;
+	line-height: 1.3;
+}
+
 /* wolv css */
 .colors-interval-25 {
     /*background-color: indianred;*/
