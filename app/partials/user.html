@@ -6,8 +6,9 @@
                 style="margin-left: 10px;"
                 ng-repeat="action in actions"
                 ng-click="call(action.call_func)"
+                ng-if="isActionVisible(action.action)"
             >
-            <span class="glyphicon {{action.img_class}}" aria-hidden="true"></span> {{action.action}}
+            <span class="glyphicon {{action.img_class}}" aria-hidden="true"></span> {{action.text}}
         </button>
         <div style="clear: left; height: 10px;"></div>
         <button
@@ -17,7 +18,7 @@
                 ng-repeat="action in actions_intervals"
                 ng-click="call(action.call_func)"
                 >
-            <span class="glyphicon {{action.img_class}}" aria-hidden="true"></span> {{action.action}}
+            <span class="glyphicon {{action.img_class}}" aria-hidden="true"></span> {{action.text}}
         </button>
     </div>
 </div>
