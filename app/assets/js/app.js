@@ -57,6 +57,32 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         user_name : undefined
     }
 
+    $scope.$checkIfUserLogged = function() {
+        if ( angular.isDefined($scope.ConnectionForm.channel_name) == false) {
+
+            var $lineTop    = $('.user-menu-toggle .line-top'),
+                $lineMiddle = $('.user-menu-toggle .line-middle'),
+                $lineBottom = $('.user-menu-toggle .line-bottom'),
+                time        = 200,
+                rotateClass = 'rotate',
+                hoverClass  = 'hover';
+
+            $(".bg-layer").addClass("show");
+            $(".user-menu").removeClass("hide");
+            $(".user-menu").addClass("user-menu-display");
+
+            var transitionTop    = $lineTop.addClass(hoverClass),
+                transitionMiddle = $lineMiddle.addClass(hoverClass),
+                transitionBottom = $lineBottom.addClass(hoverClass);
+
+            setTimeout(function() {
+                transitionTop.addClass(rotateClass);
+                transitionMiddle.addClass(rotateClass);
+                transitionBottom.addClass(rotateClass);
+            }, time);
+        }
+    }
+
     $scope.updateConnectionDetails = function() {
         if (angular.isDefined($scope.ConnectionForm.channel_name) && 0 < $scope.ConnectionForm.channel_name.length) {
             $rootScope.ConnectionData.channel_name = $scope.ConnectionForm.channel_name;
@@ -81,6 +107,29 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         }
 
         $scope.$updateUrl();
+    }
+
+    $scope.closeMenu = function() {
+        var $lineTop     = $('.user-menu-toggle .line-top'),
+            $lineMiddle  = $('.user-menu-toggle .line-middle'),
+            $lineBottom  = $('.user-menu-toggle .line-bottom'),
+            time        = 200,
+            rotateClass = 'rotate',
+            hoverClass  = 'hover';
+
+        $(".user-menu").toggleClass("user-menu-display");
+        $(".user-menu").removeClass("hide");
+        $(".bg-layer").toggleClass("show");
+
+        var transitionTop    = $lineTop.removeClass(rotateClass),
+            transitionMiddle = $lineMiddle.removeClass(rotateClass),
+            transitionBottom = $lineBottom.removeClass(rotateClass);
+
+        setTimeout(function() {
+            transitionTop.removeClass(hoverClass);
+            transitionMiddle.removeClass(hoverClass);
+            transitionBottom.removeClass(hoverClass);
+        }, time);
     }
 
     $scope.$updateUrl = function() {
@@ -122,6 +171,8 @@ pomodoroApp.controller('MainCtrl', function($scope, $rootScope, $location, socke
         $scope.updateConnectionDetails();
     }
     $scope.$formValuesFromUrl();
+
+    $scope.$checkIfUserLogged();
 
     $interval(function(){
         $rootScope.current_time = new Date();
