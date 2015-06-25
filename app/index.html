@@ -79,7 +79,7 @@
 <nav class="user-menu-toggle"></nav>
 
 <div class="top-nav">
-    <h2 ng-switch="undefined == ConnectionData.channel_name">
+    <h2 ng-switch="undefined == ConnectionData.channel_name" ng-cloak>
         <span ng-switch-when="false">
             #{{ConnectionData.channel_name}} - Pomodoro!
         </span>
