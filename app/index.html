@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="PomodoroApp">
+<html lang="en" ng-app="PomodoroApp" ng-csp>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,13 +63,14 @@
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="assets/js/offcanvas.js"></script>
 
+    <link href="assets/angular/angular-csp.css" rel="stylesheet">
 </head>
 
 <body ng-controller="MainCtrl">
 
-<div ng-if="true === error_blend" class="text-center" style="display: none;">
+<div ng-cloak class="ng-cloak text-center" ng-if="true === error_blend">
     <div style="width:100%; height: 100%; background-color: #a94442; position: fixed; left: 0; right: 0; opacity: .65; z-index: 9998;"></div>
-    <div style="width:100%; height: 100%; text-align: center; position: fixed; left: 0; right: 0; z-index: 9998; color: white; margin-top: 20%;">
+    <div style="width:100%; height: 100%; text-align: center; position: fixed; left: 0; right: 0; z-index: 9998; color: white; margin-top: 15%;">
         <h1 ng-bind-html="error_blend_text"></h1>
     </div>
 </div>
