@@ -40,9 +40,19 @@ io.on('connection', function(socket){
 
     socket.on('connect user', function(details){
         stopDisconnectTimer();
-
+console.log(details);
         if (undefined != details && undefined != details.email)
         {
+            var continueRegistering = false;
+            for (var k in details) {
+                if (undefined != details[k] || undefined != socket.user || details[k] != socket.user) {
+                    continueRegistering = true;
+                    break;
+                }
+            }
+console.log(continueRegistering);
+console.log(details);
+console.log(socket.user);
             // jezeli user podal juz dane
             unregisterUserFromPipe();
 
@@ -95,7 +105,7 @@ io.on('connection', function(socket){
 
     socket.on('who am i', function(){
         socket.emit('your details', socket.user );
-        socket.emit('you picked pipe', socket.picked_pipe);
+        socket.emit('your picked pipe', socket.picked_pipe);
         socket.emit('are you connected to pipe', checkIsUserConnectedToPipe());
 
         infoLog('ASKED FOR DETAILS');
