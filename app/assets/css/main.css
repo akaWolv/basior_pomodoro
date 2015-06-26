@@ -110,7 +110,7 @@ h4 {
 }
 
 .user-menu-toggle {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 50px;
