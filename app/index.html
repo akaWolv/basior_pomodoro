@@ -55,7 +55,7 @@
     <script src="assets/js/controllers/ChannelCtrl.js?v2015062601"></script>
     <script src="assets/js/controllers/MainCtrl.js?v2015062601"></script>
     <script src="assets/js/controllers/PomodorCtrl.js?v2015062601"></script>
-    <script src="assets/js/controllers/UserCtrl.js?v2015062601"></script>
+    <script src="assets/js/controllers/TimeCtrl.js?v2015062601"></script>
     <script src="assets/js/controllers/ErrorBlendCtrl.js?v2015062601"></script>
     <script src="assets/js/factories/socket.js?v2015062601"></script>
     <script src="assets/js/filters/secondsToDateTime.js?v2015062601"></script>
@@ -114,16 +114,19 @@
     <span ng-include="'partials/start.html'"></span>
 </div>
 
-<div class="container">
+<div>
     <div class="col-xs-12 col-sm-12">
-        <div class="row row-offcanvas row-offcanvas-right">
+        <div class="container-fluid row-offcanvas row-offcanvas-right">
             <div ng-controller="ChannelCtrl">
-                <div ng-if="undefined != channel.name" ng-include="'partials/channel.html'"></div>
+                <div class="container-fluid users-screen">
+                    <div ng-if="undefined != channel.name" ng-include="'partials/channel.html'"></div>
+                </div>
             </div>
-            <div class="time-nav" ng-controller="UserCtrl">
-                <div ng-if="undefined != user.name" ng-include="'partials/user.html'"></div>
+            <div class="time-nav">
+                <div class="container" ng-controller="TimeCtrl">
+                    <div ng-if="undefined != user.name" ng-include="'partials/time.html'"></div>
+                </div>
             </div>
-
         </div>
 
         <footer class="text-right">
