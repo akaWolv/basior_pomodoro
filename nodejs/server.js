@@ -40,7 +40,7 @@ io.on('connection', function(socket){
 
     socket.on('connect user', function(details){
         stopDisconnectTimer();
-console.log(details);
+
         if (undefined != details && undefined != details.email)
         {
             var continueRegistering = false;
@@ -50,9 +50,7 @@ console.log(details);
                     break;
                 }
             }
-console.log(continueRegistering);
-console.log(details);
-console.log(socket.user);
+
             // jezeli user podal juz dane
             unregisterUserFromPipe();
 
@@ -142,7 +140,6 @@ console.log(socket.user);
         }
 
         if (undefined != socket.picked_pipe && undefined != socket.user && undefined != socket.user.email && undefined != channels_users[socket.picked_pipe]) {
-
             channels_users[socket.picked_pipe][socket.user.email] = socket.user;
             infoLog('USER REGISTERED TO PIPE', {pipe : socket.picked_pipe, user : socket.user.email});
         }

@@ -22,7 +22,7 @@ pomodoroApp.controller('PomodorCtrl', function ($scope, $rootScope, socket) {
 
         // current user
         if ($scope.pomodor.email == $scope.ConnectionData.user_email) {
-            $rootScope.current_user = $scope.pomodor;
+            $rootScope.user = $scope.pomodor;
         }
 
         $scope.calculateCurrentTimeDiff($scope.pomodor.started_on, $rootScope.current_time);
@@ -62,7 +62,7 @@ pomodoroApp.controller('PomodorCtrl', function ($scope, $rootScope, socket) {
         }
 
         if ($scope.is_current_user_counter) {
-            $rootScope.current_user.current = $scope.pomodor.current;
+            $rootScope.user.current = $scope.pomodor.current;
         }
     }
 

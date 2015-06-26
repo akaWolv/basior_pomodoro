@@ -106,10 +106,10 @@ pomodoroApp.controller('UserCtrl', function ($scope, $rootScope, socket) {
     }
 
     $scope.resumeTimer = function () {
-        if (0 == $rootScope.user.seconds_left) {
+        if (0 == $rootScope.user.current || 0 == $rootScope.user.seconds_left) {
             $scope.stopTimer();
         } else {
-            $scope.startTimer($rootScope.user.interval, $rootScope.user.seconds_left);
+            $scope.startTimer($rootScope.user.interval, $rootScope.user.current);
         }
     }
 
@@ -117,7 +117,7 @@ pomodoroApp.controller('UserCtrl', function ($scope, $rootScope, socket) {
         socket.emit('change timer', {
             state: 'paused',
             interval: $rootScope.user.interval,
-            seconds_left: $rootScope.user.seconds_left
+            seconds_left: $rootScope.user.current
         });
     }
 
