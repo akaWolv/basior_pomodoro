@@ -114,16 +114,19 @@
     <span ng-include="'partials/start.html'"></span>
 </div>
 
-<div class="container">
+<div>
     <div class="col-xs-12 col-sm-12">
-        <div class="row row-offcanvas row-offcanvas-right">
+        <div class="container-fluid row-offcanvas row-offcanvas-right">
             <div ng-controller="ChannelCtrl">
-                <div ng-if="undefined != channel.name" ng-include="'partials/channel.html'"></div>
+                <div class="container-fluid">
+                    <div ng-if="undefined != channel.name" ng-include="'partials/channel.html'"></div>
+                </div>
             </div>
-            <div class="time-nav" ng-controller="TimeCtrl">
-                <div ng-if="undefined != user.name" ng-include="'partials/time.html'"></div>
+            <div class="time-nav">
+                <div class="container" ng-controller="TimeCtrl">
+                    <div ng-if="undefined != user.name" ng-include="'partials/time.html'"></div>
+                </div>
             </div>
-
         </div>
 
         <footer class="text-right">
