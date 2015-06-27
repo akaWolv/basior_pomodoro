@@ -1,6 +1,6 @@
 'use strict';
 
-pomodoroApp.controller('UserCtrl', function ($scope, $rootScope, socket) {
+pomodoroApp.controller('TimeCtrl', function ($scope, $rootScope, socket) {
     //$rootScope.user = {
     //    name : undefined,
     //    email : undefined,

@@ -111,7 +111,7 @@ h4 {
 }
 
 .user-menu-toggle {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 50px;
@@ -228,12 +228,17 @@ h4 {
   	font-weight: 600;
 }
 
+.users-screen {
+	margin-bottom: 150px;
+}
 
+/* bottom time controls */
 .time-nav {
+	background: #fff;
 	position: fixed;
 	bottom: 0;
-	width: 1170px;
-	margin-bottom: 20px;
+	width: 100%;
+	padding: 20px 0;
 }
 
 footer {
@@ -297,6 +302,7 @@ footer {
 	font-weight: 100;
 	line-height: 1.3;
 }
+
 
 /* wolv css */
 .colors-interval-25 {
