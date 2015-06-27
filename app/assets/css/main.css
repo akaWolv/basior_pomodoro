@@ -9,6 +9,7 @@
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
+	background-color: #f2f4f8;
 }
 
 h1, h2, h3 {
@@ -199,6 +200,11 @@ h4 {
 .block {
 	display: block;
 	width: 100%;
+}
+
+.user-box {
+	background-color: #fff;
+  	margin: 15px 0;
 }
 
 .user-info {
