@@ -9,7 +9,7 @@
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
-	background-color: #f2f4f8;
+	background-color: #E8E9EE;
 }
 
 h1, h2, h3 {
@@ -21,7 +21,8 @@ h1 {
 }
 
 h1 {
-	margin-bottom: 5px;
+	margin-bottom: 0;
+	padding-top: 5px;
 }
 
 h2 {
@@ -29,7 +30,7 @@ h2 {
 }
 
 h4 {
-	padding: 5px;
+	padding: 0 5px 10px 5px;
 	margin-top: 0;
 }
 
@@ -202,9 +203,34 @@ h4 {
 	width: 100%;
 }
 
+.display-row {
+	transition: all .2s;
+}
+
+.display-row.moved {
+	margin-left: 370px;
+	transition: all .2s;
+}
+
 .user-box {
 	background-color: #fff;
   	margin: 15px 0;
+}
+
+.user-top-section {
+	overflow: hidden;
+}
+
+.user-img-section {
+	float: left;
+	width: 130px;
+	padding: 25px 0 20px;
+}
+
+.user-name-section{
+	float: left;
+	padding-top: 25px;
+	text-align: left;
 }
 
 .user-info {
@@ -234,7 +260,7 @@ h4 {
 
 /* bottom time controls */
 .time-nav {
-	background: #fff;
+	background: #E8E9EE;
 	position: fixed;
 	bottom: 0;
 	width: 100%;
@@ -315,8 +341,8 @@ footer {
     color: #000000;
 }
 .colors-interval-break {
-    background-color: lightgray;
-    color: #424241;
+    background-color: #65C3DF;
+    color: #fff;
 }
 .colors-interval-pause {
     background-color: #ffff00;

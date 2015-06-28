@@ -8,9 +8,15 @@
                 ng-init="init(pomodor.email)"
             >
             <div class="user-box">
-                <img class="img-circle" src="http://www.gravatar.com/avatar/{{pomodor.md5_hash}}">
-                <h2>{{pomodor.name}}</h2>
-                <a href="mailto:{{pomodor.email}}">{{pomodor.email}}</a>
+                <div class="user-top-section">
+                    <div class="user-img-section">
+                        <img class="img-circle" src="http://www.gravatar.com/avatar/{{pomodor.md5_hash}}">
+                    </div>
+                    <div class="user-name-section">
+                        <h2>{{pomodor.name}}</h2>
+                        <a href="mailto:{{pomodor.email}}" title={{pomodor.email}}>E-mail</a>
+                    </div>
+                </div>
                 <h1
                         ng-switch on="pomodor.state"
                         class="{{pomodorClass()}}"
