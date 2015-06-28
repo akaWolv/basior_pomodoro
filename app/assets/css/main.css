@@ -49,7 +49,7 @@ h4 {
 
 .bg-layer {
 	display: none;
-	position: absolute;
+	position: fixed;
 	background: rgba(0,0,0,.5);
 	z-index: 9;
 	left: 0;
