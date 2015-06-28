@@ -273,10 +273,6 @@ footer {
 	bottom: 0;
 }
 
-.btn {
-	padding: 10px 12px;
-}
-
 .btn:hover {
 	background: #333;
 	color: #fff;
@@ -341,8 +337,8 @@ footer {
     color: #000000;
 }
 .colors-interval-break {
-    background-color: #65C3DF;
-    color: #fff;
+    background-color: #F0F0F0;
+    color: #999;
 }
 .colors-interval-pause {
     background-color: #ffff00;
