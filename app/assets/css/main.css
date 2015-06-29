@@ -231,6 +231,13 @@ h4 {
 	float: left;
 	padding-top: 25px;
 	text-align: left;
+	width: calc(100% - 135px);
+}
+
+.user-name-section h2 {
+	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
 }
 
 .user-info {
