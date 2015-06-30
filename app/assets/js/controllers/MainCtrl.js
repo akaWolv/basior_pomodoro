@@ -1,11 +1,6 @@
 'use strict';
 
 pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, socket, $interval, $window) {
-    $rootScope.ConnectionData = {
-        channel_name: undefined,
-        user_email: undefined,
-        user_name: undefined
-    }
 
     $scope.ConnectionForm = {
         channel_name: undefined,
