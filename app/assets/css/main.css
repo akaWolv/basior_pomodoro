@@ -238,6 +238,8 @@ h4 {
 	white-space: nowrap;
   	overflow: hidden;
   	text-overflow: ellipsis;
+  	margin: 0;
+	line-height: 1.2;
 }
 
 .user-info {
@@ -259,6 +261,11 @@ h4 {
 	font-size: 18px;
   	text-transform: uppercase;
   	font-weight: 600;
+}
+
+.user-notify-box input[type=checkbox] {
+	margin-right: 5px;
+	vertical-align: top;
 }
 
 .users-screen {
