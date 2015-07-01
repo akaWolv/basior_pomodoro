@@ -117,4 +117,11 @@ pomodoroApp.controller('PomodorCtrl', function ($scope, $rootScope, socket) {
         }
         return text;
     }
+
+    if (angular.isUndefined($rootScope.user.email) || $rootScope.user.email == $scope.pomodor.email) {
+        $scope.show_notify_checkbox = false;
+        return false;
+    } else {
+        $scope.show_notify_checkbox = true;
+    }
 });

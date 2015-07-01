@@ -6,29 +6,43 @@
         <div class="user-name-section">
             <h2>{{pomodor.name}}</h2>
             <a href="mailto:{{pomodor.email}}" title={{pomodor.email}}>E-mail</a>
+            <!-- @info: name możesz sobie zmienić -->
+            <div class="user-notify-box">
+                <label for="user-notify-checkbox" ng-if="show_notify_checkbox">
+                    <input
+                        type="checkbox"
+                        name="user-notify-checkbox"
+                        id="user-notify-checkbox"
+                        class="user-notify-checkbox"
+                        ng-model="notifyAboutStatusChange[pomodor.email]"
+                        pa-notify-status-change-switch="{{notifyAboutStatusChange[pomodor.email]}}"
+                    />
+                    Notify next status change
+                </label>
+            </div>
         </div>
     </div>
     <h1
             ng-switch on="pomodor.state"
             class="{{pomodorClass()}}"
-            >
-                    <span ng-switch-when="running">
-                        <span ng-switch="timer_running">
-                            <span ng-switch-when="false">
-                                <span class="glyphicon glyphicon-refresh" aria-hidden="true" style="font-size: .7em;"></span>
-                                <!--<img src="assets/img/al_green2.gif" alt="loading..."/>-->
-                            </span>
-                            <span ng-switch-when="true">
-                                {{pomodor.current | secondsToDateTime | date : 'm:ss'}}
-                            </span>
-                        </span>
+        >
+            <span ng-switch-when="running">
+                <span ng-switch="timer_running">
+                    <span ng-switch-when="false">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true" style="font-size: .7em;"></span>
+                        <!--<img src="assets/img/al_green2.gif" alt="loading..."/>-->
                     </span>
-                    <span ng-switch-when="stopped">
-                        stopped
+                    <span ng-switch-when="true">
+                        {{pomodor.current | secondsToDateTime | date : 'm:ss'}}
                     </span>
-                    <span ng-switch-when="paused">
-                        paused
-                    </span>
+                </span>
+            </span>
+            <span ng-switch-when="stopped">
+                stopped
+            </span>
+            <span ng-switch-when="paused">
+                paused
+            </span>
     </h1>
     <h4 class="{{pomodorClass()}}">{{pomodorText()}}</h4>
 </div>

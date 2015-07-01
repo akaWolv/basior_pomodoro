@@ -14,4 +14,8 @@ pomodoroApp.run(function($rootScope) {
         user_email: undefined,
         user_name: undefined
     }
+
+    $rootScope.user = {};
+
+    $rootScope.notifyAboutStatusChange = {};
 });

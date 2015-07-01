@@ -73,6 +73,17 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
     }
     $scope.$formValuesFromUrl();
 
+    socket.on('user status change notification', function(msg) {
+
+        $rootScope.notifyAboutStatusChange[msg.email] = undefined;
+
+        alert(
+            msg.name + ' has changed status' +
+            '\nfrom: ' + ('running' == msg.from_state ? 'interval ' + msg.from_interval + '\'' : msg.from_state ) +
+            '\nto: ' + ('running' == msg.to_state ? 'interval ' + msg.to_interval + '\'' : msg.to_state )
+        );
+    });
+
     // timers
     // clock
     $interval(function () {
@@ -100,5 +111,4 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
     $scope.closeMenu = function () {
         userMenuToggle();
     }
-
 });
