@@ -195,8 +195,9 @@ pomodoroApp.controller('TimeCtrl', function ($scope, $rootScope, socket) {
             call_func: '$scope.startTimer(\'25\', 300)',
             img_class: 'glyphicon-play',
             text_class: 'colors-interval-25'
-        },
-        {action : 'restart_xx_25', text : 'Restart ...', call_func : '$scope.startTimer(\'25\', 3)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}
+        //},
+        //{action : 'restart_xx_25', text : 'Restart ...', call_func : '$scope.startTimer(\'25\', 3)', img_class : 'glyphicon-play', text_class : 'colors-interval-25'}
+        }
     ];
 
     $scope.isActionVisible = function (action) {
