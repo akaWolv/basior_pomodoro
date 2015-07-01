@@ -7,8 +7,10 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
-var channels_users = {};
-var disconnect_timers = {}
+var channels_users = {},
+    disconnect_timers = {},
+    notify_status_change = {},
+    users_last_sockets = {};
 
 io.on('connection', function(socket){
     socket.user = undefined;
@@ -43,6 +45,8 @@ io.on('connection', function(socket){
 
         if (undefined != details && undefined != details.email)
         {
+            users_last_sockets[details.email] = socket;
+
             var continueRegistering = false;
             for (var k in details) {
                 if (undefined != details[k] || undefined != socket.user || details[k] != socket.user) {
@@ -55,6 +59,7 @@ io.on('connection', function(socket){
             unregisterUserFromPipe();
 
             if (true === getUserFromPipe(details.email)) {
+                // @todo: unfinished?
                 alreadyConnected = true;
             }
             else {
@@ -79,6 +84,8 @@ io.on('connection', function(socket){
             return false;
         }
 
+        var oldDetails = JSON.parse(JSON.stringify(socket.user));
+
         socket.user.interval = details.interval;
         socket.user.seconds_left = details.seconds_left;
         socket.user.current = details.seconds_left;
@@ -90,10 +97,14 @@ io.on('connection', function(socket){
 
         broadcastUserUpdate();
 
+        broadcastUserStatusChange(oldDetails, socket.user);
+
         infoLog('CHANGE TIMER', details);
     });
 
     socket.on('give me user list', function(){
+        stopDisconnectTimer();
+
         if (undefined != socket.picked_pipe) {
             addCurrentTimer();
 
@@ -102,11 +113,54 @@ io.on('connection', function(socket){
     });
 
     socket.on('who am i', function(){
-        socket.emit('your details', socket.user );
+        stopDisconnectTimer();
+
+        socket.emit('your details', socket.user);
         socket.emit('your picked pipe', socket.picked_pipe);
         socket.emit('are you connected to pipe', checkIsUserConnectedToPipe());
 
         infoLog('ASKED FOR DETAILS');
+    });
+
+    socket.on('notify status change', function(msg){
+        stopDisconnectTimer();
+
+        // check/define list
+        if (undefined == notify_status_change[msg.about_who]) {
+            notify_status_change[msg.about_who] = [];
+        }
+
+        var added = false;
+        // check if we already have notifaction request
+        if (-1 === notify_status_change[msg.about_who].indexOf(msg.to_who)) {
+            notify_status_change[msg.about_who].push(msg.to_who);
+            added = true;
+        }
+
+        var info = msg;
+        info.added = added;
+        infoLog('NOTIFY STATUS REQUEST', info);
+    });
+
+    socket.on('ignore status change', function(msg){
+        stopDisconnectTimer();
+
+        // nothing to do if list is not defined
+        if (undefined == notify_status_change[msg.about_who]) {
+            return true;
+        }
+
+        var removed = false;
+        // check if we have notifaction request
+        var searchValue = notify_status_change[msg.about_who].indexOf(msg.to_who);
+        if (-1 < searchValue) {
+            notify_status_change[msg.about_who].splice(searchValue, 1);
+            removed = true;
+        }
+
+        var info = msg;
+        info.removed = removed;
+        infoLog('NOTIFY STATUS IGNORE', info);
     });
 
     var checkIsUserConnectedToPipe = function() {
@@ -132,6 +186,31 @@ io.on('connection', function(socket){
         io.sockets.in(socket.picked_pipe).emit('user update ' + socket.user.email, socket.user);
 
         infoLog('USERS BROADCASTED');
+    }
+
+    var broadcastUserStatusChange = function(oldDetails, newDetails) {
+        // nothing to do if list is not defined
+        if (undefined == notify_status_change[socket.user.email] || 0 == notify_status_change[socket.user.email].length) {
+            return false;
+        }
+
+        for (var k in notify_status_change[socket.user.email]) {
+            var user_to_notify = notify_status_change[socket.user.email][k];
+            if (undefined != users_last_sockets[user_to_notify]) {
+                users_last_sockets[user_to_notify].emit('user status change notification', {
+                    name : socket.user.name,
+                    email : socket.user.email,
+                    from_state : oldDetails.state,
+                    from_interval : oldDetails.interval,
+                    to_state : newDetails.state,
+                    to_interval : newDetails.interval
+                });
+            }
+            // clear the list
+            notify_status_change[socket.user.email] = [];
+        }
+
+        infoLog('USERS STATUS CHANGE BROADCASTED');
     }
 
     var registerUserToPipe = function() {
@@ -185,11 +264,11 @@ io.on('connection', function(socket){
 
     // @todo
     var stopDisconnectTimer = function() {
-        if (undefined != socket.user && undefined != socket.user.email && undefined != disconnect_timers[socket.picked_pipe] && undefined != disconnect_timers[socket.picked_pipe][socket.user.email]) {
-            clearInterval(disconnect_timers[socket.picked_pipe][socket.user.email]);
-            delete disconnect_timers[socket.picked_pipe][socket.user.email];
-            infoLog('DISCONNECT TIMER STOPPED', {email : socket.user.email});
-        }
+        //if (undefined != socket.user && undefined != socket.user.email && undefined != disconnect_timers[socket.picked_pipe] && undefined != disconnect_timers[socket.picked_pipe][socket.user.email]) {
+        //    clearInterval(disconnect_timers[socket.picked_pipe][socket.user.email]);
+        //    delete disconnect_timers[socket.picked_pipe][socket.user.email];
+        //    infoLog('DISCONNECT TIMER STOPPED', {email : socket.user.email});
+        //}
     }
 
     socket.on('disconnect', function() {

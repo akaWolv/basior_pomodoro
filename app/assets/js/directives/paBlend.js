@@ -10,11 +10,11 @@ pomodoroApp.directive('paBlend', function() {
             }
 
             attr.$observe('paBlendShow', function(newV){
-                scope.error_blend_show = (true === attr.paBlendShow || 'true' == attr.paBlendShow);
+                scope.error_blend_show = (true === newV || 'true' == newV);
             });
 
             attr.$observe('paBlendText', function(newV){
-                scope.error_blend_text = angular.isString(attr.paBlendText) ? attr.paBlendText : 'error';
+                scope.error_blend_text = angular.isString(newV) ? newV : 'error';
             });
         }
     };
