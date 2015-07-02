@@ -8,10 +8,11 @@
             <a href="mailto:{{pomodor.email}}" title={{pomodor.email}}>E-mail</a>
             <!-- @info: name możesz sobie zmienić -->
             <div class="user-notify-box">
-                <label for="user-notify-checkbox" ng-if="show_notify_checkbox">
+                <label for="user-notify-checkbox{{$index}}" ng-if="show_notify_checkbox">
                     <input
                         type="checkbox"
                         name="user-notify-checkbox"
+                        id="user-notify-checkbox{{$index}}"
                         class="user-notify-checkbox"
                         ng-model="notifyAboutStatusChange[pomodor.email]"
                         pa-notify-status-change-switch="{{notifyAboutStatusChange[pomodor.email]}}"
