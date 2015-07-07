@@ -200,10 +200,12 @@ io.on('connection', function(socket){
                 users_last_sockets[user_to_notify].emit('user status change notification', {
                     name : socket.user.name,
                     email : socket.user.email,
+                    md5_hash : socket.user.md5_hash,
                     from_state : oldDetails.state,
                     from_interval : oldDetails.interval,
                     to_state : newDetails.state,
-                    to_interval : newDetails.interval
+                    to_interval : newDetails.interval,
+                    seconds_set : newDetails.current
                 });
             }
             // clear the list
