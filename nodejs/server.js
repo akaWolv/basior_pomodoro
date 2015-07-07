@@ -204,7 +204,8 @@ io.on('connection', function(socket){
                     from_state : oldDetails.state,
                     from_interval : oldDetails.interval,
                     to_state : newDetails.state,
-                    to_interval : newDetails.interval
+                    to_interval : newDetails.interval,
+                    seconds_set : newDetails.current
                 });
             }
             // clear the list

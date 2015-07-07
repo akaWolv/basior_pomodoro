@@ -75,10 +75,16 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
     socket.on('user status change notification', function(msg) {
         $rootScope.notifyAboutStatusChange[msg.email] = undefined;
 
+        var minutes_set = 'running' == msg.to_state ? msg.seconds_set / 60 : undefined;
+
         notification.show({
             title: msg.name + ' has changed status',
-            body: 'from: ' + ('running' == msg.from_state ? 'interval ' + msg.from_interval + '\'' : msg.from_state ) +
-                '\nto: ' + ('running' == msg.to_state ? 'interval ' + msg.to_interval + '\'' : msg.to_state ),
+            body: 'new status: ' +
+                (
+                    'running' == msg.to_state
+                    ? 'interval ' + (msg.to_interval != minutes_set ? minutes_set + '\' / ' : '') + msg.to_interval + '\''
+                    : msg.to_state
+                ),
             icon: 'http://www.gravatar.com/avatar/' + msg.md5_hash,
             nativeNotificationAdditionalBody: '\n\n(click to show channel)',
             nativeNotificationFocusOnClick: true
