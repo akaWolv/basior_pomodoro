@@ -1,7 +1,6 @@
 'use strict';
 
-pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, socket, $interval, $window) {
-
+pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, socket, $interval, notification) {
     $scope.ConnectionForm = {
         channel_name: undefined,
         user_email: undefined,
@@ -74,14 +73,16 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
     $scope.$formValuesFromUrl();
 
     socket.on('user status change notification', function(msg) {
-
         $rootScope.notifyAboutStatusChange[msg.email] = undefined;
 
-        alert(
-            msg.name + ' has changed status' +
-            '\nfrom: ' + ('running' == msg.from_state ? 'interval ' + msg.from_interval + '\'' : msg.from_state ) +
-            '\nto: ' + ('running' == msg.to_state ? 'interval ' + msg.to_interval + '\'' : msg.to_state )
-        );
+        notification.show({
+            title: msg.name + ' has changed status',
+            body: 'from: ' + ('running' == msg.from_state ? 'interval ' + msg.from_interval + '\'' : msg.from_state ) +
+                '\nto: ' + ('running' == msg.to_state ? 'interval ' + msg.to_interval + '\'' : msg.to_state ),
+            icon: 'http://www.gravatar.com/avatar/' + msg.md5_hash,
+            nativeNotificationAdditionalBody: '\n\n(click to show channel)',
+            nativeNotificationFocusOnClick: true
+        });
     });
 
     // timers
@@ -95,7 +96,6 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
     $interval(function () {
         socket.emit('i am awake');
     }, 30000);
-
 
     // ////////////////////////////////////////////// //
     // @todo: rewrite methods below in angular style  //

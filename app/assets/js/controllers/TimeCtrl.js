@@ -1,6 +1,6 @@
 'use strict';
 
-pomodoroApp.controller('TimeCtrl', function ($scope, $rootScope, socket) {
+pomodoroApp.controller('TimeCtrl', function ($scope, $rootScope, socket, notification) {
     //$rootScope.user = {
     //    name : undefined,
     //    email : undefined,
@@ -44,26 +44,38 @@ pomodoroApp.controller('TimeCtrl', function ($scope, $rootScope, socket) {
     $rootScope.$watch('timerUp', function (newValue) {
         if (true === newValue) {
             $scope.stopTimer();
-            switch ($rootScope.user.interval) {
+            var finishedInterval,
+                switchToInterval,
+                newIntervalTimeout;
+
+            switch($rootScope.user.interval) {
                 case '25':
-                    if (confirm('Interval 25\' passed. Switch to interval 5\'?')) {
-                        $scope.startTimer('5', 300);
-                    }
-                    else {
-                        // @todo: this is added to prevent confirm() loop if socket failed
-                        $rootScope.user.state = 'stopped';
-                    }
+                    finishedInterval = '25';
+                    switchToInterval = '5';
+                    newIntervalTimeout = 300;
                     break;
                 case '5':
-                    if (confirm('Interval 5\' passed. Switch to interval 25\'?')) {
-                        $scope.startTimer('25', 1500);
-                    }
-                    else {
-                        // @todo: this is added to prevent confirm() loop if socket failed
-                        $rootScope.user.state = 'stopped';
-                    }
+                    finishedInterval = '5';
+                    switchToInterval = '25';
+                    newIntervalTimeout = 1500;
                     break;
+                default:
+                    return false;
             }
+
+            notification.show({
+                title: 'Interval ' + finishedInterval + '\' passed.',
+                body: 'Switch to interval ' + switchToInterval + '\'?',
+                nativeNotificationAdditionalBody: '\n\n(click to change)',
+                nativeNotificationFocusOnClick: false,
+                methodToCallPositive: function() {
+                    $scope.startTimer(switchToInterval, newIntervalTimeout);
+                },
+                methodToCallNegative: function() {
+                    // @todo: this is added to prevent confirm() loop if socket failed
+                    $rootScope.user.state = 'stopped';
+                }
+            });
         }
         $rootScope.timerUp = undefined;
     });
