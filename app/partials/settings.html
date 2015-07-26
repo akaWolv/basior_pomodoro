@@ -36,7 +36,22 @@
                         placeholder="name"
                         ng-model="ConnectionForm.user_name"
                         ng-blur="updateConnectionDetails()"
-                    />
+                        />
+            </div>
+            <div class="form-group block">
+                <label for="switchDarkMode">
+                    <i class="glyphicon glyphicon-lamp"></i>
+                </label>
+                <input
+                        type="checkbox"
+                        class="form-control"
+                        id="switchDarkMode"
+                        ng-model="main.darkMode"
+                        />
+
+                <label for="switchDarkMode" style="width: auto; font-size: .4em;">
+                    <span class="text-center">dark&nbsp;mode ({{true === main.darkMode ? 'on' : 'off'}})</span>
+                </label>
             </div>
             <div class="checkbox" style="display: none">
                 <label>

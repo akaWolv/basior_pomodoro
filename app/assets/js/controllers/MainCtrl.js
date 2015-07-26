@@ -1,6 +1,9 @@
 'use strict';
 
 pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, socket, $interval, notification) {
+
+    this.darkMode = false;
+
     $scope.ConnectionForm = {
         channel_name: undefined,
         user_email: undefined,
