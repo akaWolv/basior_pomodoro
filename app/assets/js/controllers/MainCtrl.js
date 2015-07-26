@@ -2,7 +2,17 @@
 
 pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, socket, $interval, notification) {
 
+    /**
+     * dark layout witch
+     * @type {boolean}
+     */
     this.darkMode = false;
+
+    /**
+     * prevents burn-in effect on LCD screen
+     * @type {boolean}
+     */
+    this.burnInGuard = true;
 
     $scope.ConnectionForm = {
         channel_name: undefined,
@@ -120,4 +130,67 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
     $scope.closeMenu = function () {
         userMenuToggle();
     }
+
+    $scope.burnInGuardProcessorInit = function () {
+        var $burnGuard = $('<div>').attr('id','burnGuard').css({
+            'background-color':'#FF00FF',
+            'width':'1px',
+            'height':$(document).height()+'px',
+            'position':'absolute',
+            'top':'0px',
+            'left':'0px',
+            'display':'none',
+            'zIndex' : 10000
+        }).appendTo('body');
+
+        var colors = ['#FF0000','#00FF00','#0000FF'],
+            color = 0,
+            delay = 4000,
+            scrollDelay = 1000,
+            easing = 'linear',
+            instance = undefined,
+            processor = function ()
+            {
+                color = ++color % 3;
+                var rColor = colors[color];
+                $burnGuard.css({
+                    'left':'0px',
+                    'background-color':rColor
+                })
+                .show()
+                .animate(
+                    {'left': $(window).width()+'px'},
+                    scrollDelay,
+                    easing,
+                    function(){
+                        $(this).hide();
+                    }
+                );
+            },
+            start = function () {
+                if (angular.isUndefined(instance)) {
+                    instance = $interval(processor, delay);
+                }
+            },
+            cancel = function () {
+                if (angular.isDefined(instance)) {
+                    $interval.cancel( instance );
+                    instance = undefined;
+                }
+            };
+
+        return {start : start, cancel : cancel};
+    }
+
+    $scope.burnInGuardProcessorRepeater = $scope.burnInGuardProcessorInit();
+    $scope.toggleBurnInGuardRepeater = function(toggle) {
+        if (angular.isDefined($scope.burnInGuardProcessorRepeater)) {
+            if (true === toggle) {
+                $scope.burnInGuardProcessorRepeater.start();
+            } else {
+                $scope.burnInGuardProcessorRepeater.cancel();
+            }
+        }
+    };
+    $scope.toggleBurnInGuardRepeater(this.burnInGuard);
 });
