@@ -6,13 +6,13 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
      * dark layout switch
      * @type {boolean}
      */
-    this.darkMode = false;
+    this.darkMode = true;
 
     /**
      * prevents burn-in effect on LCD screen
      * @type {boolean}
      */
-    this.burnInGuard = false;
+    this.burnInGuard = true;
 
     $scope.ConnectionForm = {
         channel_name: undefined,
@@ -135,8 +135,8 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
         var $burnGuard = $('<div>').attr('id','burnGuard').css({
             'background-color':'#FF00FF',
             'width':'1px',
-            'height':$(document).height()+'px',
-            'position':'absolute',
+            'height':$(document).height() * 4 + 'px',
+            'position':'fixed',
             'top':'0px',
             'left':'0px',
             'display':'none',
@@ -146,7 +146,7 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
         var colors = ['#FF0000','#00FF00','#0000FF'],
             color = 0,
             delay = 4000,
-            scrollDelay = 1000,
+            scrollDelay = 1500,
             easing = 'linear',
             instance = undefined,
             bodyMargin = {
