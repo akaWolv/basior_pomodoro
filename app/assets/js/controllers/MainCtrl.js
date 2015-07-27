@@ -6,13 +6,13 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
      * dark layout switch
      * @type {boolean}
      */
-    this.darkMode = true;
+    this.darkMode = false;
 
     /**
      * prevents burn-in effect on LCD screen
      * @type {boolean}
      */
-    this.burnInGuard = true;
+    this.burnInGuard = false;
 
     $scope.ConnectionForm = {
         channel_name: undefined,

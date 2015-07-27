@@ -78,15 +78,6 @@
 
 <div pa-blend pa-blend-show="{{error_blend.show}}" pa-blend-text="{{error_blend.text}}"></div>
 
-<div class="notify">
-    <div class="user-notify">
-        <div class="center">
-            <img class="img-circle" src="http://www.gravatar.com/avatar/d5b23de660b97dec0486599557ffe832">
-            <span>Rafau<br>is now avaiable</span>
-        </div>
-    </div>
-</div>
-
 <div class="bg-layer"></div>
 <nav id="user-menu-toggle" class="user-menu-toggle"></nav>
 
@@ -137,26 +128,23 @@
 </div>
 <!--/.container-->
 
+<style type="text/css" ng-if="false === main.darkMode">
+    body { background-color: #dfdfdf; color: #424241; }
+
+    .time-nav { background-color: #E8E9EE; }
+    .user-box .colors-interval-25 { color: #ffe4a8; background-color: #e4262c; }
+    .user-box .colors-interval-5 { color: dimgrey; background-color: #ADFF2F; }
+    .user-box .colors-interval-break { color: dimgrey; background-color: #cecece; }
+    .user-box .colors-interval-pause { color: dimgrey; background-color: #ffff00; }
+</style>
 <style type="text/css" ng-if="true === main.darkMode">
+    body { background-color: #000; color: antiquewhite; }
 
-    body {
-        background-color: #000;
-        color: antiquewhite;
-    }
-
-    .colors-interval-break {
-        background-color: transparent;
-    }
-
-    .time-nav {
-        background-color: #131312 !important;
-    }
-
-    .user-box .colors-interval-5 { background-color: transparent; color: antiquewhite; }
-    .user-box .colors-interval-25 { background-color: transparent; color: antiquewhite; }
-    .user-box .colors-interval-break { background-color: transparent; color: antiquewhite; }
-    .user-box .colors-interval-pause { background-color: transparent; color: antiquewhite; }
-
+    .time-nav { background-color: #131312; }
+    .user-box .colors-interval-5 { color: antiquewhite; }
+    .user-box .colors-interval-25 { color: antiquewhite; }
+    .user-box .colors-interval-break { color: antiquewhite; }
+    .user-box .colors-interval-pause { color: antiquewhite; }
 </style>
 
 </body>
