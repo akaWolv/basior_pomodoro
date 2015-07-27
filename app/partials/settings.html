@@ -36,7 +36,38 @@
                         placeholder="name"
                         ng-model="ConnectionForm.user_name"
                         ng-blur="updateConnectionDetails()"
-                    />
+                        />
+            </div>
+            <div class="form-group block">
+                <label for="switchDarkMode">
+                    <i class="glyphicon glyphicon-lamp"></i>
+                </label>
+                <input
+                        type="checkbox"
+                        class="form-control"
+                        id="switchDarkMode"
+                        ng-model="main.darkMode"
+                        />
+
+                <label for="switchDarkMode" style="width: auto; font-size: .4em;">
+                    <span class="text-center">dark mode ({{true === main.darkMode ? 'on' : 'off'}})</span>
+                </label>
+            </div>
+            <div class="form-group block">
+                <label for="switchBurnInGuard">
+                    <i class="glyphicon glyphicon-fire"></i>
+                </label>
+                <input
+                        type="checkbox"
+                        class="form-control"
+                        id="switchBurnInGuard"
+                        ng-model="main.burnInGuard"
+                        ng-change="toggleBurnInGuardRepeater(main.burnInGuard)"
+                        />
+
+                <label for="switchBurnInGuard" style="width: auto; font-size: .4em;">
+                    <span class="text-center">burn-in guard ({{true === main.burnInGuard ? 'on' : 'off'}})</span>
+                </label>
             </div>
             <div class="checkbox" style="display: none">
                 <label>

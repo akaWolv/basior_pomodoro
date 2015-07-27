@@ -74,7 +74,7 @@
     <script src="assets/js/offcanvas.js"></script>
 </head>
 
-<body ng-controller="MainCtrl">
+<body ng-controller="MainCtrl as main">
 
 <div pa-blend pa-blend-show="{{error_blend.show}}" pa-blend-text="{{error_blend.text}}"></div>
 
@@ -107,7 +107,7 @@
 </div>
 
 <div class="hide user-menu">
-    <span ng-include="'partials/start.html'"></span>
+    <span ng-include="'partials/settings.html'"></span>
 </div>
 
 <div ng-if="socket_available">
@@ -136,6 +136,28 @@
     </div>
 </div>
 <!--/.container-->
+
+<style type="text/css" ng-if="true === main.darkMode">
+
+    body {
+        background-color: #000;
+        color: antiquewhite;
+    }
+
+    .colors-interval-break {
+        background-color: transparent;
+    }
+
+    .time-nav {
+        background-color: #131312 !important;
+    }
+
+    .user-box .colors-interval-5 { background-color: transparent; color: antiquewhite; }
+    .user-box .colors-interval-25 { background-color: transparent; color: antiquewhite; }
+    .user-box .colors-interval-break { background-color: transparent; color: antiquewhite; }
+    .user-box .colors-interval-pause { background-color: transparent; color: antiquewhite; }
+
+</style>
 
 </body>
 </html>

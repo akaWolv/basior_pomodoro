@@ -92,6 +92,48 @@ pomodoroApp.controller('PomodorCtrl', function ($scope, $rootScope, socket) {
         return name;
     }
 
+    $scope.currentStateColor = function () {
+        var colorHex = '';
+        switch ($scope.pomodor.state) {
+            case 'running':
+                switch ($scope.pomodor.interval) {
+                    case '5':
+                        colorHex = '#ADFF2F'
+                        break;
+                    case '25':
+                        colorHex = '#e4262c'
+                        break;
+                    default:
+                        colorHex = '#F0F0F0'
+                        break;
+                }
+                break;
+            case 'stopped':
+                colorHex = '#000000'
+                break;
+            case 'paused':
+                colorHex = '#ffff00'
+                break;
+        }
+        return colorHex;
+    }
+
+    $scope.userBoxMainColor = function (darkMode) {
+        return true === darkMode ? '#262626' : '#FFFFFF';
+    }
+
+    $scope.getUserBoxStyle = function (darkMode) {
+        if (true === darkMode) {
+            return "" +
+                "background: -webkit-linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 75%);" +
+                "background:    -moz-linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 75%);" +
+                "background:      -o-linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 75%);" +
+                "background:         linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);";
+        } else {
+            return "";
+        }
+    }
+
     $scope.pomodorText = function () {
         var text = '';
         switch ($scope.pomodor.state) {
