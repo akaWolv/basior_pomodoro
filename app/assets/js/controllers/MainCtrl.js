@@ -3,10 +3,10 @@
 pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, socket, $interval, notification) {
 
     /**
-     * dark layout witch
+     * dark layout switch
      * @type {boolean}
      */
-    this.darkMode = false;
+    this.darkMode = true;
 
     /**
      * prevents burn-in effect on LCD screen
@@ -135,22 +135,36 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
         var $burnGuard = $('<div>').attr('id','burnGuard').css({
             'background-color':'#FF00FF',
             'width':'1px',
-            'height':$(document).height()+'px',
-            'position':'absolute',
+            'height':$(document).height() * 4 + 'px',
+            'position':'fixed',
             'top':'0px',
             'left':'0px',
             'display':'none',
-            'zIndex' : 10000
+            'zIndex' : 190000
         }).appendTo('body');
 
         var colors = ['#FF0000','#00FF00','#0000FF'],
             color = 0,
             delay = 4000,
-            scrollDelay = 1000,
+            scrollDelay = 1500,
             easing = 'linear',
             instance = undefined,
+            bodyMargin = {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                _horizontalDirection: Math.random() < .5 ? -1 : 1,
+                _horizontalMin: -45,
+                _horizontalMax: 45,
+                _verticalDirection: Math.random() < .5 ? -1 : 1,
+                _verticalMin: -30,
+                _verticalMax: 30,
+                _step: 1
+            },
             processor = function ()
             {
+                // stripe
                 color = ++color % 3;
                 var rColor = colors[color];
                 $burnGuard.css({
@@ -166,6 +180,42 @@ pomodoroApp.controller('MainCtrl', function ($scope, $rootScope, $location, sock
                         $(this).hide();
                     }
                 );
+
+                // body movement
+                if (bodyMargin.left <= bodyMargin._horizontalMin || bodyMargin.left >= bodyMargin._horizontalMax) {
+                    bodyMargin._horizontalDirection = -1 * bodyMargin._horizontalDirection;
+                }
+
+                bodyMargin.left  = bodyMargin.left + (bodyMargin._step * bodyMargin._horizontalDirection);
+                bodyMargin.right = -1 * bodyMargin.left;
+
+                if (bodyMargin.top <= bodyMargin._verticalMin || bodyMargin.top >= bodyMargin._verticalMax) {
+                    bodyMargin._verticalDirection = -1 * bodyMargin._verticalDirection;
+                }
+
+                bodyMargin.top = bodyMargin.top + (bodyMargin._step * bodyMargin._verticalDirection);
+                bodyMargin.bottom = -1 * bodyMargin.top;
+
+                $('#channelBricksContainer').css(
+                    {
+                        marginLeft : bodyMargin.left  + 'px',
+                        marginRight : bodyMargin.right + 'px',
+                        marginTop : bodyMargin.top + 'px',
+                        marginBottom : bodyMargin.bottom + 'px'
+                    }
+                );
+
+                // @todo? check on big screeen
+                //$('#channelBricksContainer').animate(
+                //    {
+                //        marginLeft : bodyMargin.left  + 'px',
+                //        marginRight : bodyMargin.right + 'px',
+                //        marginTop : bodyMargin.top + 'px',
+                //        marginBottom : bodyMargin.bottom + 'px'
+                //    },
+                //    delay,
+                //    easing
+                //);
             },
             start = function () {
                 if (angular.isUndefined(instance)) {
