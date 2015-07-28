@@ -22,7 +22,7 @@ h1 {
 
 h1 {
     margin-bottom: 0;
-    padding-top: 5px;
+    /*padding-top: 5px;*/
 }
 
 h2 {
@@ -30,7 +30,7 @@ h2 {
 }
 
 h4 {
-    padding: 0 5px 10px 5px;
+    padding: 5px;
     margin-top: 0;
 }
 
@@ -213,27 +213,42 @@ h4 {
 }
 
 .user-box {
-    background-color: #fff;
+    background-color: #CBCBCB;
     margin: 15px 0;
 }
 
+.user-box .interval-info {
+    opacity: .6;
+}
+
 .user-top-section {
-    overflow: hidden;
+    height: 75px;
+    padding-top: 15px;
 }
 
 .user-img-section {
+    overflow: hidden;
     float: left;
-    width: 130px;
-    padding: 25px 0 20px;
+    width: 110px;
+    padding-left: 10px;
+    height: 120px;
+    padding-top: 15px;
+}
+
+.user-img-section img {
+    position: relative;
+    width: 90px;
+    float: left;
 }
 
 .user-name-section{
     float: left;
-    padding-top: 25px;
     text-align: left;
-    width: calc(100% - 135px);
+    width: calc(100% - 110px);
+    font-weight: bolder;
 }
 
+.user-name-section h1,
 .user-name-section h2 {
     white-space: nowrap;
     overflow: hidden;
@@ -242,6 +257,23 @@ h4 {
     line-height: 1.2;
 }
 
+.user-name-section h1 {
+    height: 60px;
+    line-height: 60px;
+    font-size: 45px;
+}
+
+.user-name-as-header h1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    height: 75px;
+    line-height: 75px;
+    font-size: 40px;
+    text-align: left;
+    padding-left: 20px;
+}
 .user-info {
     position: fixed;
     top: 0;
@@ -262,7 +294,9 @@ h4 {
     text-transform: uppercase;
     font-weight: 600;
 }
-
+div.user-notify-box {
+    margin-top: -10px;
+}
 .user-notify-box input[type=checkbox] {
     margin-right: 5px;
     vertical-align: top;
@@ -278,7 +312,6 @@ h4 {
 
 /* bottom time controls */
 .time-nav {
-    background: #E8E9EE;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -344,21 +377,23 @@ footer {
 }
 
 
-/* wolv css */
-.colors-interval-25 {
+
+button.colors-interval-25 {
     /*background-color: indianred;*/
     background-color: #e4262c;
     color: ghostwhite;
 }
-.colors-interval-5 {
+button.colors-interval-5 {
     background-color: #ADFF2F;
     color: #000000;
 }
-.colors-interval-break {
+button.colors-interval-break {
     background-color: #F0F0F0;
     color: #999;
 }
-.colors-interval-pause {
+button.colors-interval-pause {
     background-color: #ffff00;
     color: dimgrey;
 }
+
+

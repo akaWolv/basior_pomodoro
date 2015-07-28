@@ -92,28 +92,54 @@ pomodoroApp.controller('PomodorCtrl', function ($scope, $rootScope, socket) {
         return name;
     }
 
-    $scope.currentStateColor = function () {
+    $scope.currentStateColor = function (darkMode) {
         var colorHex = '';
-        switch ($scope.pomodor.state) {
-            case 'running':
-                switch ($scope.pomodor.interval) {
-                    case '5':
-                        colorHex = '#ADFF2F'
-                        break;
-                    case '25':
-                        colorHex = '#e4262c'
-                        break;
-                    default:
-                        colorHex = '#F0F0F0'
-                        break;
-                }
-                break;
-            case 'stopped':
-                colorHex = '#000000'
-                break;
-            case 'paused':
-                colorHex = '#ffff00'
-                break;
+        if (true === darkMode) {
+            // dark mode
+            switch ($scope.pomodor.state) {
+                case 'running':
+                    switch ($scope.pomodor.interval) {
+                        case '5':
+                            colorHex = '#ADFF2F';
+                            break;
+                        case '25':
+                            colorHex = '#e4262c';
+                            break;
+                        default:
+                            colorHex = '#F0F0F0';
+                            break;
+                    }
+                    break;
+                case 'stopped':
+                    colorHex = '#000000';
+                    break;
+                case 'paused':
+                    colorHex = '#ffff00';
+                    break;
+            }
+        } else {
+            // light mode
+            switch ($scope.pomodor.state) {
+                case 'running':
+                    switch ($scope.pomodor.interval) {
+                        case '5':
+                            colorHex = '#ADFF2F';
+                            break;
+                        case '25':
+                            colorHex = '#e4262c';
+                            break;
+                        default:
+                            colorHex = '#F0F0F0';
+                            break;
+                    }
+                    break;
+                case 'stopped':
+                    colorHex = '#aaa';
+                    break;
+                case 'paused':
+                    colorHex = '#ffff00';
+                    break;
+            }
         }
         return colorHex;
     }
@@ -125,12 +151,16 @@ pomodoroApp.controller('PomodorCtrl', function ($scope, $rootScope, socket) {
     $scope.getUserBoxStyle = function (darkMode) {
         if (true === darkMode) {
             return "" +
-                "background: -webkit-linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 75%);" +
-                "background:    -moz-linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 75%);" +
-                "background:      -o-linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 75%);" +
-                "background:         linear-gradient(0deg, " + $scope.currentStateColor() + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);";
+                "background: -webkit-linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);" +
+                "background:    -moz-linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);" +
+                "background:      -o-linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);" +
+                "background:         linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);";
         } else {
-            return "";
+            return "" +
+                "background: -webkit-linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);" +
+                "background:    -moz-linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);" +
+                "background:      -o-linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " -150%, " + $scope.userBoxMainColor(darkMode) + " 95%);" +
+                "background:         linear-gradient(0deg, " + $scope.currentStateColor(darkMode) + " 0%, " + $scope.userBoxMainColor(darkMode) + " 95%);";
         }
     }
 
